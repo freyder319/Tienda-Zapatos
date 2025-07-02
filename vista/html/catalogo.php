@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tienda de Tenis</title>
+  <title>Tienda de Computadoras y Repuestos</title>
   <link rel="stylesheet" href="vista/css/style.css">
   <script src="Vista/jquery/jquery.js"></script>
   <script src="Vista/js/script.js"></script>
@@ -23,7 +23,7 @@
   ?>
 
   <header>
-    <h1>Tienda de Tenis</h1>
+    <h1>Tienda de Computadoras y Repuestos</h1>
     <div id="nav"></div>
   </header>
   <?php
@@ -57,8 +57,10 @@
               echo $fila1["imagen"];
             } ?>">
             <h3><?php echo $fila1["nombre"]; ?></h3>
-            <p>Categoría: <?php echo $fila1["nombre_categoria"]; ?></p>
-            <p> <?php echo $fila1["precio"]; ?></p>
+            <p>Especificacion:<?php echo $fila1["especificaciones"]; ?></p>
+            <p>Marca: <?php echo $fila1["marca"]; ?></p>
+            <p>Tipo: <?php echo $fila1["nombre_categoria"]; ?></p>
+            <p> $<?php echo $fila1["precio"]; ?></p>
             <?php
             if (isset($_SESSION["rol"]) && $_SESSION["rol"] == "cliente") {
               ?>

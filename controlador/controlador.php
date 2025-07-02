@@ -51,11 +51,16 @@ class Controlador
         $gestor->eliminarCategoria($id);
         header("location:index.php?action=verAdministracion");
     }
-    public function guardarProducto($nombre, $descripcion, $precio, $talla, $categoria, $file)
+    public function guardarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo)
     {
-        $producto = new Productos($nombre, $descripcion, $precio, $talla, $categoria, $file);
+        $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
         $gestor = new GestorProducto;
-        $gestor->agregarProducto($producto);
+        $idProducto=$gestor->agregarProducto($producto);
+        return $idProducto;
+    }
+    public function guardarImagen($id_producto,$file){
+        $gestor = new GestorProducto;
+        $gestor->guardarImagen($id_producto,$file);
         echo "<script>alert('Producto agregado correctamente');</script>";
         header("location:index.php?action=verAdministracion");
     }
@@ -74,9 +79,9 @@ class Controlador
         $categoriasSelect = $gestor->consultarCategorias();
         require_once("vista/html/productos.php");
     }
-    public function editarProducto($id, $nombre, $descripcion, $precio, $talla, $categoria, $file)
+    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file,$id)
     {
-        $producto = new Productos($nombre, $descripcion, $precio, $talla, $categoria, $file);
+        $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file);
         $gestor = new GestorProducto;
         $gestor->editarProducto($producto, $id);
         header("location:index.php?action=verAdministracion");
@@ -146,9 +151,9 @@ class Controlador
         $pedidos = $gestor->consultarPedidos();
         require_once("vista/html/pedidos.php");
     }
-    public function editarProductosinFoto($id, $nombre, $descripcion, $precio, $talla, $categoria)
+    public function editarProductosinFoto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file, $id)
     {
-        $producto = new Productos($nombre, $descripcion, $precio, $talla, $categoria, "");
+        $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo, "");
         $gestor = new GestorProducto;
         $gestor->editarProductoSinFoto($producto, $id);
         header("location:index.php?action=verAdministracion");
