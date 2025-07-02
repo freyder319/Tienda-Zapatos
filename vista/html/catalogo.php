@@ -1,0 +1,113 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda de Tenis</title>
+  <link rel="stylesheet" href="vista/css/style.css">
+</head>
+<body>
+  <?php
+  if (isset($_GET["mensaje"])){
+      if ($_GET["mensaje"]==1){
+          echo("<script>alert('Pedido realizado exitosamente.')</script>");
+          ?>
+          <script>window.location.href = "index.php?action=verInicio";</script>
+          <?php
+      }
+  }
+  ?>
+
+  <header>
+    <h1>Tienda de Tenis</h1>
+    <nav>
+      <a href="index.php?action=verInicio">Inicio</a>
+      <a href="index.php?action=verInicio">Catálogo</a>
+      <?php
+        if (isset($_SESSION["rol"])&& $_SESSION["rol"]=="admin"){
+        ?>
+        <a href="index.php?action=verProducto">Productos</a>
+        <a href="index.php?action=verCategoria">Categorias</a>
+        <a href="index.php?action=verPedidos">Pedidos</a>
+        <?php
+      }else{
+        ?>
+        <a href="index.php?action=verAdministracion">Zona Admin</a>
+        <?php
+      }
+      
+      if (isset($_SESSION["rol"])){?>
+        <a href="index.php?action=cerrarSesion">Cerrar Sesión</a>
+<?php
+      }else{
+        ?>
+        <a href="index.php?action=verRegistro">Registrarse</a>
+        <?php
+      }
+      
+      ?>
+    </nav>
+  </header>
+  <?php 
+  ?>
+  <form action="index.php?action=filtrarCategoria" method="post" >
+  <label for="categoria">Filtrar por categoría:</label>
+  <select name="categoria" id="categoria">
+    <option value="">Todas</option>
+    <?php
+    while($cat = $categorias->fetch_assoc()) {
+      echo "<option value='".$cat["id"]."'>".$cat["nombre"]."</option>";
+    }
+    ?>
+  </select>
+  <input type="submit" value="Filtrar">
+</form>
+
+  <section id="catalogo">
+    <h2>Catálogo de Productos</h2>
+    <div class="productos">
+      <?php
+      if (isset($productos) && $productos->num_rows > 0){
+
+        while($fila1=$productos->fetch_assoc()){
+    ?>
+    <div class="producto">
+        <img src="<?php if ($fila1["imagen"]==NULL){
+          echo"vista/imagenes/sinFoto.jpg";
+          }else{
+            echo"uploads/"; echo $fila1["imagen"];
+            } ?>">
+        <h3><?php echo $fila1["nombre"]; ?></h3>
+        <p>Categoría: <?php echo $fila1["nombre_categoria"]; ?></p>
+        <p>Talla:  <?php echo $fila1["talla"]; ?></p>
+        <p> <?php echo $fila1["precio"]; ?></p>
+        <?php 
+        if (isset($_SESSION["rol"]) && $_SESSION["rol"]=="cliente"){
+          ?>
+          <a href="index.php?action=realizarPedido&id=<?php echo $fila1["id_producto"] ?>"><button>Solicitar Compra</button></a>
+          <?php
+        }else{
+          ?>
+          <p>Registrese para realizar un pedido.</p>
+          <?php
+        }
+        ?>
+  
+      </div>
+    <?php
+  }}else{
+    ?>
+    <div class="producto">
+      <h3 >Aun no hay productos disponibles.</h3>
+    </div>
+    <?php
+  }?>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Tienda de Tenis. Todos los derechos reservados.</p>
+  </footer>
+</body>
+</html>
