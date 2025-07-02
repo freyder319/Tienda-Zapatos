@@ -7,7 +7,10 @@ class GestorProducto{
         $sql="SELECT productos.id AS id_producto,
        categorias.nombre AS nombre_categoria,
        productos.nombre,
-       productos.precio
+       productos.especificaciones,
+       productos.precio,
+       productos.modelo,
+       productos.marca
 FROM productos
 JOIN categorias ON productos.id_categoria = categorias.id;";
         $conexion->consulta($sql);
@@ -26,19 +29,28 @@ JOIN categorias ON productos.id_categoria = categorias.id;";
     }
     public function agregarProducto(productos $productos){
         $nombre=$productos->obtenernombre();
-        $descripcion=$productos->obtenerdescripcion();
+        $especificacion=$productos->obtenerEspecificacion();
         $precio=$productos->obtenerprecio();
-        $talla=$productos->obtenertalla();
-        $categoria=$productos->obtenercategoria();
-        $file=$productos->obtenerimagen();
+        $modelo=$productos->obtenerModelo();
+        $marca=$productos->obtenermarca();
+        $categoria=$productos->obtenertipo();
         $conexion=new conexion;
         $conexion->abrir();
-        $sql="INSERT INTO productos VALUES (NULL,'$nombre','$precio','$file','$categoria','$talla')";
+        $sql="INSERT INTO productos VALUES (NULL,'$nombre','$especificacion','$precio','$categoria','$marca','$modelo','$categoria')";
         $conexion->consulta($sql);
-        $result=$conexion->obtenerResultado();
+        $result=$conexion->ObtenerId();
         $conexion->cerrar();
         return $result;
     }
+    public function guardarImagen($id_producto,$file){
+        $conexion=new conexion;
+        $conexion->abrir();
+        $sql="INSERT INTO imagenes values (NULL,'$id_producto','$file')";
+        $conexion->consulta($sql);
+        $result=$conexion->obtenerFilasAfectadas();
+        $conexion->cerrar();
+        return $result;
+    }   
     public function eliminarProducto($id){
         $conexion=new conexion;
         $conexion->abrir();
@@ -52,12 +64,15 @@ JOIN categorias ON productos.id_categoria = categorias.id;";
         $conexion=new conexion;
         $conexion->abrir();
         $sql="SELECT productos.id AS id_producto,
-       categorias.nombre AS nombre_categoria,
-       categorias.id as id_categoria,
-       productos.nombre,
-       productos.precio
-FROM productos
-JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$id'";
+        categorias.nombre AS nombre_categoria,
+        categorias.id as id_categoria,
+        productos.nombre,
+        productos.especificaciones,
+        productos.precio,
+        productos.modelo,
+        productos.marca
+        FROM productos
+        JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$id'";
         $conexion->consulta($sql);
         $result=$conexion->obtenerResultado();
         $conexion->cerrar();
@@ -65,14 +80,13 @@ JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$i
     }
     public function editarProducto(productos $productos, $id){
         $nombre=$productos->obtenernombre();
-        $descripcion=$productos->obtenerdescripcion();
+        $descripcion=$productos->obtenerEspecificacion();
         $precio=$productos->obtenerprecio();
-        $talla=$productos->obtenertalla();
-        $categoria=$productos->obtenercategoria();
-        $file=$productos->obtenerimagen();
+        $talla=$productos->obtenerModelo();
+        $categoria=$productos->obtenertipo();
         $conexion=new conexion;
         $conexion->abrir();
-        $sql="UPDATE productos SET nombre='$nombre', precio='$precio', imagen='$file', id_categoria='$categoria' WHERE id='$id'";
+        $sql="UPDATE productos SET nombre='$nombre', precio='$precio', id_categoria='$categoria' WHERE id='$id'";
         $conexion->consulta($sql);
         $result=$conexion->obtenerFilasAfectadas();
         $conexion->cerrar();
@@ -82,12 +96,15 @@ JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$i
         $conexion=new conexion;
         $conexion->abrir();
         $sql="SELECT productos.id AS id_producto,
-       categorias.nombre AS nombre_categoria,
-       categorias.id as id_categoria,
-       productos.nombre,
-       productos.precio
+        categorias.nombre AS nombre_categoria,
+        categorias.id as id_categoria,
+        productos.nombre,
+        productos.especificaciones,
+        productos.precio,
+        productos.modelo,
+        productos.marca
         FROM productos
-        JOIN categorias ON productos.id_categoria = categorias.id ";
+        JOIN categorias ON productos.id_categoria = categorias.id";
         $conexion->consulta($sql);
         $result=$conexion->obtenerResultado();
         $conexion->cerrar();
@@ -95,10 +112,10 @@ JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$i
     }
     public function editarProductoSinFoto(productos $productos, $id){
         $nombre=$productos->obtenernombre();
-        $descripcion=$productos->obtenerdescripcion();
+        $descripcion=$productos->obtenerEspecificacion();
         $precio=$productos->obtenerprecio();
-        $talla=$productos->obtenertalla();
-        $categoria=$productos->obtenercategoria();
+        $talla=$productos->obtenerModelo();
+        $categoria=$productos->obtenertipo();
         $conexion=new conexion;
         $conexion->abrir();
         $sql="UPDATE productos SET nombre='$nombre', precio='$precio', id_categoria='$categoria' WHERE id='$id'";
