@@ -1,5 +1,5 @@
 <?php 
-class conexion{
+class Conexion{
     private $mySQLI;
     private $sql;
     private $result;

@@ -1,6 +1,6 @@
 <?php
 
-class categoria{
+class Categoria{
     public function guardarCategoria($categoria){
         $conexion=new conexion;
         $conexion->abrir();

@@ -1,6 +1,6 @@
 <?php
 
-class gestorPedido{
+class GestorPedido{
     public function guardarPedido($pedido){
         $idProducto = $pedido->obtenerIdProducto();
         $idUsuario = $pedido->obtenerIdUsuario();
