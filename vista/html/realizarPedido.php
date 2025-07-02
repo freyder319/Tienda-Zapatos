@@ -19,11 +19,10 @@
   <section id="admin">
     <h2>Pedido:</h2>
     <p><strong>Cantidad de producto que quieres pedir:</strong></p>
-    <form action="index.php?action=agregarPedido" method="post">
+    <form action="index.php?action=agregarCarrito" method="post">
       <input type="hidden" value="<?php echo $id ?>" id="idProducto" name="idProducto">
-      <input type="hidden" value="<?php echo $_SESSION["id_usuario"] ?>" id="idUsuario" name="idUsuario">
       <input type="text" placeholder="cantidad" id="cantidad" name="cantidad" required>
-      <button type="submit">Ingresar</button>
+      <button type="submit">Agregar al carrito</button>
     </form>
   </section>
   <footer>

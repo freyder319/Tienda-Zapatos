@@ -33,6 +33,12 @@ if (isset($_GET['action'])) {
         case "verRegistro":
             $controlador->verPagina("vista/html/registrarse.php");
             break;
+        case "verCarrito":
+            $controlador->verPagina("vista/html/carrito.php");
+            break;
+        case "verMisPedidos":
+            $pedidosCliente = $controlador->consultarMisPedidos($_SESSION["id"]);
+            break;
         case "cerrarSesion":
             session_destroy();
             $resultado = $controlador->consultarProductosCategoria();
@@ -53,7 +59,11 @@ if (isset($_GET['action'])) {
             $nombre = $_POST["nombre"];
             $correo = $_POST["correo"];
             $contrasenia = $_POST["contrasena"];
-            $controlador->agregarUsuario($nombre, $correo, $contrasenia);
+            $controlador->agregarUsuario(
+                $nombre,
+                $correo,
+                $contrasenia
+            );
             break;
 
         // =======================
@@ -92,23 +102,49 @@ if (isset($_GET['action'])) {
         // Productos
         // =======================
         case "guardarProducto":
-            $ruta_indexphp = "uploads";
-            $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
+
+            $ruta_indexphp = "uploads/";
+            $extensiones = array('image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/webp');
             $max_tamanyo = 1024 * 1024 * 16;
-            $cover = $_FILES['cover']['name'];
-            $ruta_fichero_origen = $_FILES['cover']['tmp_name'];
-            $ruta_nuevo_destino = $ruta_indexphp . '/' . $_FILES['cover']['name'];
-            if (in_array($_FILES['cover']['type'], $extensiones)) {
-                if ($_FILES['cover']['size'] < $max_tamanyo) {
-                    move_uploaded_file($ruta_fichero_origen, $ruta_nuevo_destino);
+            $imagen = $_FILES['imagen']['name'];
+            $ruta_fichero_origen = $_FILES['imagen']['tmp_name'];
+            $ruta_nuevo_destino = $ruta_indexphp . $imagen;
+
+            if (in_array($_FILES['imagen']['type'], $extensiones)) {
+                if ($_FILES['imagen']['size'] < $max_tamanyo) {
+                    if (file_exists($ruta_nuevo_destino)) {
+                        $nombre_sin_ext = pathinfo($imagen, PATHINFO_FILENAME);
+                        $extension = pathinfo($imagen, PATHINFO_EXTENSION);
+                        $imagen = $nombre_sin_ext . '_' . uniqid() . '.' . $extension;
+                        $ruta_nuevo_destino = $ruta_indexphp . $imagen;
+                    }
+                    if (move_uploaded_file($ruta_fichero_origen, $ruta_nuevo_destino)) {
+                    } else {
+                        echo 'Error al guardar la imagen.';
+                        exit;
+                    }
+                } else {
+                    echo 'La imagen es demasiado grande.';
+                    exit;
                 }
+            } else {
+                echo 'El archivo no es una imagen válida.';
+                exit;
             }
+
             $nombre = $_POST["nombre"];
             $descripcion = $_POST["descripcion"];
             $precio = $_POST["precio"];
             $talla = $_POST["talla"];
             $categoria = $_POST["categoria"];
-            $controlador->guardarProducto($nombre, $descripcion, $precio, $talla, $categoria, $cover);
+            $controlador->guardarProducto(
+                $nombre,
+                $descripcion,
+                $precio,
+                $talla,
+                $categoria,
+                $imagen
+            );
             break;
         case "eliminarProducto":
             $id = $_GET["id"];
@@ -126,7 +162,14 @@ if (isset($_GET['action'])) {
             $talla = $_POST["talla"];
             $categoria = $_POST["categoria"];
             if (isset($_FILES['cover']['name']) && $_FILES['cover']['name'] == "") {
-                $controlador->editarProductosinFoto($id, $nombre, $descripcion, $precio, $talla, $categoria);
+                $controlador->editarProductosinFoto(
+                    $id,
+                    $nombre,
+                    $descripcion,
+                    $precio,
+                    $talla,
+                    $categoria
+                );
             } else {
                 $imagen = $controlador->consultarImagen($id);
                 if ($imagen["imagen"] != "") {
@@ -135,23 +178,64 @@ if (isset($_GET['action'])) {
                         unlink($ruta);
                     }
                 }
-                $ruta_indexphp = "uploads";
-                $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
-                $max_tamanyo = 1024 * 1024 * 16;
-                $cover = $_FILES['cover']['name'];
-                $ruta_fichero_origen = $_FILES['cover']['tmp_name'];
-                $ruta_nuevo_destino = $ruta_indexphp . '/' . $_FILES['cover']['name'];
-                if (in_array($_FILES['cover']['type'], $extensiones)) {
-                    if ($_FILES['cover']['size'] < $max_tamanyo) {
-                        move_uploaded_file($ruta_fichero_origen, $ruta_nuevo_destino);
+                $ruta_indexphp = "uploads/";
+                $extensiones = array('image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/webp');
+                $max_tamanyo = 1024 * 1024 * 16; // 16 MB
+                $imagen = $_FILES['imagen']['name'];
+                $ruta_fichero_origen = $_FILES['imagen']['tmp_name'];
+                $ruta_nuevo_destino = $ruta_indexphp . $imagen;
+
+                if (in_array($_FILES['imagen']['type'], $extensiones)) {
+                    // Validar tamaño
+                    if ($_FILES['imagen']['size'] < $max_tamanyo) {
+                        if (file_exists($ruta_nuevo_destino)) {
+                            $nombre_sin_ext = pathinfo($imagen, PATHINFO_FILENAME);
+                            $extension = pathinfo($imagen, PATHINFO_EXTENSION);
+                            $imagen = $nombre_sin_ext . '_' . uniqid() . '.' . $extension;
+                            $ruta_nuevo_destino = $ruta_indexphp . $imagen;
+                        }
+                        if (move_uploaded_file($ruta_fichero_origen, $ruta_nuevo_destino)) {
+                        } else {
+                            echo 'Error al guardar la imagen.';
+                            exit;
+                        }
+                    } else {
+                        echo 'La imagen es demasiado grande.';
+                        exit;
                     }
+                } else {
+                    echo 'El archivo no es una imagen válida.';
+                    exit;
                 }
                 $file = $cover;
-                $controlador->editarProducto($id, $nombre, $descripcion, $precio, $talla, $categoria, $file);
+                $controlador->editarProducto(
+                    $id,
+                    $nombre,
+                    $descripcion,
+                    $precio,
+                    $talla,
+                    $categoria,
+                    $imagen
+                );
             }
             break;
         case "verProducto":
             $productos = $controlador->consultarProductos();
+            break;
+
+        // =======================
+        // Carrito
+        // =======================
+
+        case "agregarCarrito":
+            $id = $_POST["idProducto"];
+            $idUsuario = $_SESSION["id"];
+            $cantidad = $_POST["cantidad"];
+            $fecha = date("Y-m-d H:i:s");
+            $controlador->agregarCarrito(
+                $id,
+                $cantidad
+            );
             break;
 
         // =======================

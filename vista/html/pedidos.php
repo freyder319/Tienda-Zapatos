@@ -39,58 +39,62 @@
         <h2>Panel de Administración</h2>
         <div class="admin-section">
           <h3>Pedidos</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>ID Pedido</th>
-                <th>Cliente</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              while ($fila4 = $pedidos->fetch_assoc()) {
-                ?>
+          <?php if (isset($pedidos) && $pedidos->num_rows > 0) { ?>
+            <table>
+              <thead>
                 <tr>
-                  <td><?php echo $fila4["pedido_id"] ?></td>
-                  <td><?php echo $fila4["nombre_usuario"] ?></td>
-                  <td><?php echo $fila4["nombre_producto"] ?></td>
-                  <td><?php echo $fila4["cantidad"] ?></td>
-                  <td><?php echo $fila4["fecha"] ?></td>
-                  <td><?php echo $fila4["estado"] ?></td>
-                  <td><?php if ($fila4["estado"] == "Completado") {
-                    echo "Completado";
-                  } else {
-                    ?>
-                      <form action='index.php?action=actualizarEstadoPedido' method='post'>
-                        <input type='hidden' id="pedido_id" name='pedido_id' value="<?php echo $fila4["pedido_id"] ?>">
-                        <select name='estado' id="estado">
-                          <option <?php if ($fila4["estado"] == "Pendiente") {
-                            echo "selected";
-                          } ?> value='Pendiente'>Pendiente
-                          </option>
-                          <option <?php if ($fila4["estado"] == "Enviado") {
-                            echo "selected";
-                          } ?> value='Enviado'>Enviado
-                          </option>
-                          <option <?php if ($fila4["estado"] == "Completado") {
-                            echo "selected";
-                          } ?> value='Completado'>
-                            Completado
-                          </option>
-                        </select>
-                        <button type='submit'>Actualizar</button>
-                      </form><?php
-                  } ?>
-                  </td>
+                  <th>ID Pedido</th>
+                  <th>Cliente</th>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
                 </tr>
+              </thead>
+              <tbody>
                 <?php
-              }
-
-              ?>
+                while ($fila4 = $pedidos->fetch_assoc()) {
+                  ?>
+                  <tr>
+                    <td><?php echo $fila4["pedido_id"] ?></td>
+                    <td><?php echo $fila4["nombre_usuario"] ?></td>
+                    <td><?php echo $fila4["nombre_producto"] ?></td>
+                    <td><?php echo $fila4["cantidad"] ?></td>
+                    <td><?php echo $fila4["fecha"] ?></td>
+                    <td><?php echo $fila4["estado"] ?></td>
+                    <td><?php if ($fila4["estado"] == "Completado") {
+                      echo "Completado";
+                    } else {
+                      ?>
+                        <form action='index.php?action=actualizarEstadoPedido' method='post'>
+                          <input type='hidden' id="pedido_id" name='pedido_id' value="<?php echo $fila4["pedido_id"] ?>">
+                          <select name='estado' id="estado">
+                            <option <?php if ($fila4["estado"] == "Pendiente") {
+                              echo "selected";
+                            } ?> value='Pendiente'>Pendiente
+                            </option>
+                            <option <?php if ($fila4["estado"] == "Enviado") {
+                              echo "selected";
+                            } ?> value='Enviado'>Enviado
+                            </option>
+                            <option <?php if ($fila4["estado"] == "Completado") {
+                              echo "selected";
+                            } ?> value='Completado'>
+                              Completado
+                            </option>
+                          </select>
+                          <button type='submit'>Actualizar</button>
+                        </form><?php
+                    } ?>
+                    </td>
+                  </tr>
+                  <?php
+                }
+          } else { ?>
+                <tr>
+                  <td colspan="7">No hay pedidos registrados.</td>
+                </tr>
+              <?php } ?>
             </tbody>
           </table>
         </div>
