@@ -7,8 +7,7 @@ class GestorProducto{
         $sql="SELECT productos.id AS id_producto,
        categorias.nombre AS nombre_categoria,
        productos.nombre,
-       productos.precio,
-       productos.talla
+       productos.precio
 FROM productos
 JOIN categorias ON productos.id_categoria = categorias.id;";
         $conexion->consulta($sql);
@@ -34,7 +33,7 @@ JOIN categorias ON productos.id_categoria = categorias.id;";
         $file=$productos->obtenerimagen();
         $conexion=new conexion;
         $conexion->abrir();
-        $sql="INSERT INTO productos VALUES (NULL,'$nombre','$descripcion','$precio','$file','$categoria','$talla')";
+        $sql="INSERT INTO productos VALUES (NULL,'$nombre','$precio','$file','$categoria','$talla')";
         $conexion->consulta($sql);
         $result=$conexion->obtenerResultado();
         $conexion->cerrar();
@@ -56,9 +55,7 @@ JOIN categorias ON productos.id_categoria = categorias.id;";
        categorias.nombre AS nombre_categoria,
        categorias.id as id_categoria,
        productos.nombre,
-       productos.precio,
-       productos.talla,
-       productos.descripcion
+       productos.precio
 FROM productos
 JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$id'";
         $conexion->consulta($sql);
@@ -75,7 +72,7 @@ JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$i
         $file=$productos->obtenerimagen();
         $conexion=new conexion;
         $conexion->abrir();
-        $sql="UPDATE productos SET nombre='$nombre', descripcion='$descripcion', precio='$precio', imagen='$file', id_categoria='$categoria', talla='$talla' WHERE id='$id'";
+        $sql="UPDATE productos SET nombre='$nombre', precio='$precio', imagen='$file', id_categoria='$categoria' WHERE id='$id'";
         $conexion->consulta($sql);
         $result=$conexion->obtenerFilasAfectadas();
         $conexion->cerrar();
@@ -88,10 +85,7 @@ JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$i
        categorias.nombre AS nombre_categoria,
        categorias.id as id_categoria,
        productos.nombre,
-       productos.precio,
-       productos.talla,
-       productos.descripcion,
-       productos.imagen
+       productos.precio
         FROM productos
         JOIN categorias ON productos.id_categoria = categorias.id ";
         $conexion->consulta($sql);
@@ -107,7 +101,7 @@ JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$i
         $categoria=$productos->obtenercategoria();
         $conexion=new conexion;
         $conexion->abrir();
-        $sql="UPDATE productos SET nombre='$nombre', descripcion='$descripcion', precio='$precio', id_categoria='$categoria', talla='$talla' WHERE id='$id'";
+        $sql="UPDATE productos SET nombre='$nombre', precio='$precio', id_categoria='$categoria' WHERE id='$id'";
         $conexion->consulta($sql);
         $result=$conexion->obtenerFilasAfectadas();
         $conexion->cerrar();
@@ -139,10 +133,7 @@ JOIN categorias ON productos.id_categoria = categorias.id WHERE productos.id='$i
        categorias.nombre AS nombre_categoria,
        categorias.id as id_categoria,
        productos.nombre,
-       productos.precio,
-       productos.talla,
-       productos.descripcion,
-       productos.imagen
+       productos.precio
         FROM productos
         JOIN categorias ON productos.id_categoria = categorias.id WHERE categorias.id='$categoria'";
         $conexion->consulta($sql);

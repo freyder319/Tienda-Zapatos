@@ -58,7 +58,6 @@
             } ?>">
             <h3><?php echo $fila1["nombre"]; ?></h3>
             <p>Categoría: <?php echo $fila1["nombre_categoria"]; ?></p>
-            <p>Talla: <?php echo $fila1["talla"]; ?></p>
             <p> <?php echo $fila1["precio"]; ?></p>
             <?php
             if (isset($_SESSION["rol"]) && $_SESSION["rol"] == "cliente") {
