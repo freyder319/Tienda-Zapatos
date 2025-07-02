@@ -5,7 +5,7 @@ class Controlador{
         require_once($ruta);
     }
     public function validar($correo,$contrasenia){
-        $gestor=new gestorUsuario;
+        $gestor=new GestorUsuario;
         $resultado=$gestor->validarCorreo($correo);
         if ($resultado==1){
             $resultado2=$gestor->validarClave($correo,$contrasenia);
@@ -29,17 +29,17 @@ class Controlador{
         require_once("vista/html/productos.php");
     }
     public function guardarCategoria($categoria){
-        $gestor=new categoria;
+        $gestor=new Categoria;
         $gestor->guardarCategoria($categoria);
         header("location:index.php?action=verAdministracion");
     }
     public function eliminarCategoria($id){
-        $gestor=new categoria;
+        $gestor=new Categoria;
         $gestor->eliminarCategoria($id);
         header("location:index.php?action=verAdministracion");
     }
     public function guardarProducto($nombre,$descripcion,$precio,$talla,$categoria,$file){
-        $producto=new productos($nombre,$descripcion,$precio,$talla,$categoria,$file);
+        $producto=new Productos($nombre,$descripcion,$precio,$talla,$categoria,$file);
         $gestor=new GestorProducto;
         $gestor->agregarProducto($producto);
         echo "<script>alert('Producto agregado correctamente');</script>";
@@ -59,7 +59,7 @@ class Controlador{
         require_once("vista/html/productos.php");
     }
     public function editarProducto($id,$nombre,$descripcion,$precio,$talla,$categoria,$file){
-        $producto=new productos($nombre,$descripcion,$precio,$talla,$categoria,$file);
+        $producto=new Productos($nombre,$descripcion,$precio,$talla,$categoria,$file);
         $gestor=new GestorProducto;
         $gestor->editarProducto($producto,$id);
         header("location:index.php?action=verAdministracion");
@@ -85,7 +85,7 @@ class Controlador{
     }
     public function guardarPedido($id,$idUsuario,$cantidad,$fecha){
         $gestor=new GestorPedido;
-        $pedido=new pedido($id,$idUsuario,$cantidad,$fecha);
+        $pedido=new Pedido($id,$idUsuario,$cantidad,$fecha);
         $gestor->guardarPedido($pedido);
         header("location:index.php?action=verInicio&mensaje=1");
     }
@@ -97,7 +97,7 @@ class Controlador{
         require_once("vista/html/catalogo.php");
     }
     public function consultarCategoriaxid($id){
-        $gestor=new categoria;
+        $gestor=new Categoria;
         $gestor2=new GestorProducto;
         $categoriaxid=$gestor->consultarCategoriaxid($id);
         $productos=$gestor2->consultarProductos();
@@ -106,22 +106,22 @@ class Controlador{
         require_once("vista/html/admin.php");
     }
     public function guardarCategoriaNueva($id,$nombre){
-        $gestor=new categoria;
+        $gestor=new Categoria;
         $gestor->editarCategoria($id,$nombre);
         header("location:index.php?action=verAdministracion");
     }
     public function consultarCategorias(){
-        $gestor=new gestorProducto;
+        $gestor=new GestorProducto;
         $categorias=$gestor->consultarCategorias();
         require_once("vista/html/categorias.php");
     }
     public function consultarPedidos(){
-        $gestor=new gestorProducto;
+        $gestor=new GestorProducto;
         $pedidos=$gestor->consultarPedidos();
         require_once("vista/html/pedidos.php");
     }
     public function editarProductosinFoto($id,$nombre,$descripcion,$precio,$talla,$categoria){
-        $producto=new productos($nombre,$descripcion,$precio,$talla,$categoria,"");
+        $producto=new Productos($nombre,$descripcion,$precio,$talla,$categoria,"");
         $gestor=new GestorProducto;
         $gestor->editarProductoSinFoto($producto,$id);
         header("location:index.php?action=verAdministracion");

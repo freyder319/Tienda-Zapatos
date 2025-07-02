@@ -1,13 +1,13 @@
 <?php 
-require_once("controlador/controlador.php");
-require_once("modelo/conexion.php");
-require_once("modelo/gestorUsuario.php");
-require_once("modelo/gestorProductos.php");
-require_once("modelo/gestorCategoria.php");
-require_once("modelo/productos.php");
-require_once("modelo/gestorPedido.php");
-require_once("modelo/pedido.php");
-$controlador = new controlador();
+require_once("Controlador/Controlador.php");
+require_once("Modelo/Conexion.php");
+require_once("Modelo/GestorUsuario.php");
+require_once("Modelo/GestorProductos.php");
+require_once("Modelo/GestorCategoria.php");
+require_once("Modelo/Productos.php");
+require_once("Modelo/GestorPedido.php");
+require_once("Modelo/Pedido.php");
+$controlador = new Controlador();
 session_start();
 if(isset($_GET["action"])){
     if($_GET["action"]=="verInicio"){
