@@ -14,7 +14,7 @@ class Controlador
             $resultado2 = $gestor->validarClave($correo, $contrasenia);
             if ($resultado2 == 1) {
                 $resultado3 = $gestor->consultarDatos($correo);
-                $_SESSION["rol"] = "admin";
+                $_SESSION["rol"] = $resultado3["rol"];
                 $_SESSION["id"] = $resultado3["id"];
 
                 if ($_SESSION["rol"] == "admin") {
