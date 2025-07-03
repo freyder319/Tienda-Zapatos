@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-07-2025 a las 20:27:10
+-- Tiempo de generación: 04-07-2025 a las 00:45:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -50,10 +50,19 @@ INSERT INTO `categorias` (`id`, `nombre`) VALUES
 --
 
 CREATE TABLE `imagenes` (
-  `IDimagen` int(11) NOT NULL,
-  `nombre_imagen` int(11) NOT NULL,
-  `id_producto` int(11) DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `id_producto` int(11) DEFAULT NULL,
+  `nombre_archivo` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `imagenes`
+--
+
+INSERT INTO `imagenes` (`id`, `id_producto`, `nombre_archivo`) VALUES
+(1, 2, '1751488414_Captura de pantalla 2025-05-26 135253.png'),
+(2, 2, '1751488414_Captura de pantalla 2025-05-26 141413.png'),
+(3, 2, '1751488414_Captura de pantalla 2025-05-26 142449.png');
 
 -- --------------------------------------------------------
 
@@ -81,12 +90,18 @@ CREATE TABLE `productos` (
   `nombre` varchar(100) NOT NULL,
   `especificaciones` varchar(200) DEFAULT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `id_imagen` int(100) NOT NULL,
   `id_categoria` int(11) DEFAULT NULL,
   `marca` varchar(200) NOT NULL,
   `modelo` varchar(200) NOT NULL,
   `tipo` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `nombre`, `especificaciones`, `precio`, `id_categoria`, `marca`, `modelo`, `tipo`) VALUES
+(2, 'Computador HP', 'hp 240', 20000.00, 1, 'HP', 'HP1235', '1');
 
 -- --------------------------------------------------------
 
@@ -109,7 +124,8 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `contrasena`, `rol`) VALUES
 (1, 'admin', 'admin@gmail.com', '$2y$10$/mP8AqKJXHZ4ssrYeZGtFObrzbgaUGUYMvqUUdWQZcDb14D4.r8EG', 'admin'),
 (2, 'Freyder Díaz Peñuela', 'freyderjapo@gmail.com', '$2y$10$aTb2F4/Ka3LqhcpgI3W36u3QG/ZQUKr0sdtZNpr0bZS4IUbPigDi.', 'cliente'),
-(3, 'games', 'game@gmail.com', '$2y$10$QnzK.q0BUu3bC4ejefycEukveJOm2TGDFoc9lo8CnVBegQoQJ1Fh.', 'cliente');
+(3, 'games', 'game@gmail.com', '$2y$10$QnzK.q0BUu3bC4ejefycEukveJOm2TGDFoc9lo8CnVBegQoQJ1Fh.', 'cliente'),
+(4, 'yan', 'yan@gmail.com', '$2y$10$0Ez655/kPK3aBoRzPJGM.ebQezcoezsAluFyvEPISJ4rRhnoKce6m', 'cliente');
 
 --
 -- Índices para tablas volcadas
@@ -125,8 +141,8 @@ ALTER TABLE `categorias`
 -- Indices de la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  ADD PRIMARY KEY (`IDimagen`),
-  ADD KEY `FK_imagenes` (`id_producto`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_producto` (`id_producto`);
 
 --
 -- Indices de la tabla `pedidos`
@@ -141,8 +157,7 @@ ALTER TABLE `pedidos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_categoria` (`id_categoria`),
-  ADD KEY `FK_productos_imagenes` (`id_imagen`);
+  ADD KEY `id_categoria` (`id_categoria`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -165,7 +180,7 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  MODIFY `IDimagen` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
@@ -177,13 +192,13 @@ ALTER TABLE `pedidos`
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -193,7 +208,7 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  ADD CONSTRAINT `FK_imagenes` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`);
+  ADD CONSTRAINT `imagenes_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`);
 
 --
 -- Filtros para la tabla `pedidos`
@@ -206,7 +221,6 @@ ALTER TABLE `pedidos`
 -- Filtros para la tabla `productos`
 --
 ALTER TABLE `productos`
-  ADD CONSTRAINT `FK_productos_imagenes` FOREIGN KEY (`id_imagen`) REFERENCES `imagenes` (`IDimagen`),
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`) ON DELETE SET NULL;
 COMMIT;
 
