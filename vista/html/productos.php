@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tienda de Tenis</title>
+  <title>Tienda de Computadoras y Repuestos</title>
   <link rel="stylesheet" href="vista/css/style.css">
   <script src="Vista/jquery/jquery.js"></script>
   <script src="Vista/js/script.js"></script>
@@ -27,7 +27,7 @@
   }
   ?>
   <header>
-    <h1>Tienda de Tenis</h1>
+    <h1>Tienda de Computadoras y Repuestos</h1>
     <div id="nav"></div>
   </header>
 
@@ -72,11 +72,12 @@
             <form class="form-admin" action="index.php?action=guardarProducto" method="post" required required
               enctype="multipart/form-data">
               <input type="text" placeholder="Nombre del producto" id="nombre" name="nombre" required>
-              <input type="text" placeholder="Descripcion" id="descripcion" name="descripcion" required>
+              <input type="text" placeholder="Especificacion de Producto" id="especificacion" name="especificacion" required>
               <input type="number" placeholder="Precio" id="precio" name="precio" required>
-              <input type="text" placeholder="Talla" id="talla" name="talla" required>
+              <input type="text" placeholder="Marca" id="talla" name="marca" required>
+              <input type="text" placeholder="Modelo" id="talla" name="modelo" required>
               <select id="categoria" name="categoria" required>
-                <option value="">Seleccionar categoría</option>
+                <option value="">Seleccionar Tipo</option>
                 <?php
                 while ($fila2 = $categoriasSelect->fetch_assoc()) {
                   ?>
@@ -85,7 +86,7 @@
                 }
                 ?>
               </select>
-              <input id="cover" class="upload" name="cover" type="file" multiple>
+              <input id="cover" class="upload" name="cover[]" type="file" multiple>
               <button type="submit">Guardar Producto</button>
             </form>
             <?php
@@ -97,9 +98,10 @@
               <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Categoría</th>
+                <th>Tipo</th>
                 <th>Precio</th>
-                <th>Talla</th>
+                <th>Modelo</th>
+                <th>Marca</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -112,7 +114,8 @@
                   <td><?php echo $fila["nombre"] ?></td>
                   <td><?php echo $fila["nombre_categoria"] ?></td>
                   <td><?php echo $fila["precio"] ?></td>
-                  <td><?php echo $fila["talla"] ?></td>
+                  <td><?php echo $fila["modelo"] ?></td>
+                  <td><?php echo $fila["marca"] ?></td>
                   <td>
                     <a href="index.php?action=editarProducto&id=<?php echo $fila["id_producto"] ?>">Editar</a>
                     <a href="index.php?action=eliminarProducto&id=<?php echo $fila['id_producto']; ?>"
