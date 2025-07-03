@@ -48,9 +48,10 @@
               enctype="multipart/form-data">
               <input type="hidden" value="<?php echo $fila3["id_producto"] ?>" id="idProducto" name="idProducto">
               <input type="text" value="<?php echo $fila3["nombre"] ?>" id="nombre" name="nombre" required>
-              <input type="text" value="<?php echo $fila3["descripcion"] ?>" id="descripcion" name="descripcion" required>
+              <input type="text" value="<?php echo $fila3["especificaciones"] ?>" id="descripcion" name="especificaciones" required>
               <input type="number" value="<?php echo $fila3["precio"] ?>" id="precio" name="precio" required>
-              <input type="text" value="<?php echo $fila3["talla"] ?>" id="talla" name="talla" required>
+              <input type="text" value="<?php echo $fila3["marca"] ?>" id="marca" name="marca" required>
+              <input type="text" value="<?php echo $fila3["modelo"] ?>" id="modelo" name="modelo" required>
               <select id="categoria" name="categoria" required>
                 <option value="">Seleccionar categoría</option>
                 <?php
