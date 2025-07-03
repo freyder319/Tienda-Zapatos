@@ -64,8 +64,8 @@
             <?php
             if (isset($_SESSION["rol"]) && $_SESSION["rol"] == "cliente") {
               ?>
-              <a href="index.php?action=realizarPedido&id=<?php echo $fila1["id_producto"] ?>"><button>Solicitar
-                  Compra</button></a>
+              <a href="index.php?action=realizarPedido&id=<?php echo $fila1["id_producto"] ?>"><button>Agregar al
+                  carrito</button></a>
               <?php
             } else {
               ?>

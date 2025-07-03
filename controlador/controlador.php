@@ -115,6 +115,39 @@ class Controlador
         $gestor->guardarPedido($pedido);
         header("location:index.php?action=verInicio&mensaje=1");
     }
+    public function agregarCarrito($idProducto, $cantidad)
+    {
+        $gestor = new GestorProducto;
+
+        $productos = $gestor->consultarProductosxid($idProducto);
+        if ($productos && count($productos) > 0) {
+            $producto = $productos[0];
+
+            if (!isset($_SESSION['carrito'])) {
+                $_SESSION['carrito'] = [];
+            }
+
+            if (isset($_SESSION['carrito'][$idProducto])) {
+                $_SESSION['carrito'][$idProducto]['cantidad'] += $cantidad;
+            } else {
+                $_SESSION['carrito'][$idProducto] = [
+                    'idProducto' => $producto['id_producto'],
+                    'nombre' => $producto['nombre'],
+                    'precio' => $producto['precio'],
+                    'cantidad' => $cantidad
+                ];
+            }
+
+            $carritoCliente = $_SESSION['carrito'];
+            require_once("vista/html/carrito.php");
+            exit;
+            
+        } else {
+            echo "<script>alert('Producto no encontrado');</script>"
+                . "<script>window.location.href='index.php?action=verInicio';</script>";
+            exit;
+        }
+    }
     public function consultarProductosCategoriaxid($categoria)
     {
         $gestor = new GestorProducto;
