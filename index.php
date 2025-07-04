@@ -34,10 +34,10 @@ if (isset($_GET['action'])) {
             $controlador->verPagina("vista/html/registrarse.php");
             break;
         case "verCarrito":
-            $controlador->verPagina("vista/html/carrito.php");
+                $controlador->mostrarCarrito();
             break;
         case "verMisPedidos":
-            $pedidosCliente = $controlador->consultarMisPedidos($_SESSION["id"]);
+            $pedidosCliente = $controlador->consultarPedidosCliente($_SESSION["id"]);
             break;
         case "cerrarSesion":
             session_destroy();
@@ -108,7 +108,7 @@ if (isset($_GET['action'])) {
             $max_tamanyo = 1024 * 1024 * 16; // 16MB
 
             // Array para almacenar los nombres de las imágenes subidas
-            $nombres_archivos = array(); 
+            $nombres_archivos = array();
 
             // Subir todas las imágenes
             foreach ($_FILES['cover']['name'] as $key => $nombre_archivo) {
@@ -127,30 +127,30 @@ if (isset($_GET['action'])) {
                         $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
                     }
 
+                } else {
+                    echo 'El archivo no es una imagen válida.';
+                    exit;
                 }
-            } else {
-                echo 'El archivo no es una imagen válida.';
-                exit;
+
+                // Resto de los datos del formulario
+
+                $nombre = $_POST["nombre"];
+                $especificacion = $_POST["especificacion"];
+                $precio = $_POST["precio"];
+
+                $marca = $_POST["marca"];
+                $modelo = $_POST["modelo"];
+                $tipo = $_POST["categoria"];
+                $id_producto = $controlador->guardarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
+
+                // Ahora guardamos las imágenes asociadas a ese producto
+                foreach ($nombres_archivos as $file) {
+                    // Guardamos la imagen en la tabla de imágenes
+                    $controlador->guardarImagen($id_producto, $file);
+                }
+
+                break;
             }
-
-            // Resto de los datos del formulario
-
-            $nombre = $_POST["nombre"];
-            $especificacion = $_POST["especificacion"];
-            $precio = $_POST["precio"];
-
-            $marca = $_POST["marca"];
-            $modelo = $_POST["modelo"];
-            $tipo = $_POST["categoria"];
-            $id_producto = $controlador->guardarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
-
-            // Ahora guardamos las imágenes asociadas a ese producto
-            foreach ($nombres_archivos as $file) {
-                // Guardamos la imagen en la tabla de imágenes
-                $controlador->guardarImagen($id_producto, $file);
-            }
-
-            break;
 
         case "eliminarProducto":
             $id = $_GET["id"];
@@ -169,7 +169,7 @@ if (isset($_GET['action'])) {
             $categoria = $_POST["categoria"];
             if (isset($_FILES['cover']['name']) && $_FILES['cover']['name'] == "") {
 
-                $controlador->editarProductosinFoto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file,$id);
+                $controlador->editarProductosinFoto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file, $id);
 
             } else {
                 $imagen = $controlador->consultarImagen($id);
@@ -209,7 +209,7 @@ if (isset($_GET['action'])) {
                     exit;
                 }
                 $file = $cover;
-                $controlador->editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file,$id);
+                $controlador->editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file, $id);
             }
             break;
         case "verProducto":
@@ -253,7 +253,12 @@ if (isset($_GET['action'])) {
             $estado = $_POST["estado"];
             $controlador->actualizarEstadoPedido($id, $estado);
             break;
-
+        case "eliminarCarrito":
+            $controlador->eliminarCarrito();
+            break;
+        case "confirmarPedido":
+            $controlador->confirmarPedido();
+            break;
         // =======================
         // Default (inicio)
         // =======================

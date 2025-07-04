@@ -48,14 +48,14 @@
       if (isset($productos) && $productos->num_rows > 0) {
 
         while ($fila1 = $productos->fetch_assoc()) {
+          if (!isset($fila1["imagen"]) || $fila1["imagen"] == NULL) {
+            $rutaImagen = "vista/imagenes/sinFoto.jpg";
+          } else {
+            $rutaImagen = "uploads/" . $fila1["imagen"];
+          }
           ?>
           <div class="producto">
-            <img src="<?php if ($fila1["imagen"] == NULL) {
-              echo "vista/imagenes/sinFoto.jpg";
-            } else {
-              echo "uploads/";
-              echo $fila1["imagen"];
-            } ?>">
+            <img src="<?php echo $rutaImagen; ?>">
             <h3><?php echo $fila1["nombre"]; ?></h3>
             <p>Especificacion:<?php echo $fila1["especificaciones"]; ?></p>
             <p>Marca: <?php echo $fila1["marca"]; ?></p>
@@ -73,7 +73,6 @@
               <?php
             }
             ?>
-
           </div>
           <?php
         }
