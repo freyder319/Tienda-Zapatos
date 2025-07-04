@@ -29,8 +29,8 @@ if (isset($_SESSION['rol'])) {
 } else {
     ?>
     <nav>
-        <a href="index.php?accion=inicio">Inicio</a>
-        <a href="index.php?accion=inicio">Catálogo</a>
+        <a href="index.php?action=inicio">Inicio</a>
+        <a href="index.php?action=inicio">Catálogo</a>
         <a href="index.php?action=verRegistro">Registrarse</a>
         <a href="index.php?action=verAdministracion">Zona login</a>
     </nav>

@@ -57,7 +57,6 @@
                                 <td><?php echo $fila4["cantidad"] ?></td>
                                 <td><?php echo $fila4["fecha"] ?></td>
                                 <td><?php echo $fila4["estado"] ?></td>
-                                <td><?php echo $fila4["estado"] ?></td>
                             </tr>
                         <?php }
             } else { ?>
