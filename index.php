@@ -121,7 +121,10 @@ if (isset($_GET['action'])) {
                     // Crear una ruta única para la imagen (puedes agregar un prefijo único para evitar sobreescribir)
                     $nombre_archivo = time() . '_' . basename($nombre_archivo);
                     $ruta_nuevo_destino = $ruta_indexphp . '/' . $nombre_archivo;
-
+                } else {
+                    echo 'El archivo no es una imagen válida.';
+                    exit;
+                }
                     // Mover el archivo a la carpeta de destino
                     if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
                         $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
@@ -131,6 +134,7 @@ if (isset($_GET['action'])) {
                     echo 'El archivo no es una imagen válida.';
                     exit;
                 }
+
 
                 // Resto de los datos del formulario
 
@@ -143,14 +147,14 @@ if (isset($_GET['action'])) {
                 $tipo = $_POST["categoria"];
                 $id_producto = $controlador->guardarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
 
-                // Ahora guardamos las imágenes asociadas a ese producto
-                foreach ($nombres_archivos as $file) {
-                    // Guardamos la imagen en la tabla de imágenes
-                    $controlador->guardarImagen($id_producto, $file);
-                }
 
-                break;
+            // Ahora guardamos las imágenes asociadas a ese producto
+            foreach ($nombres_archivos as $file) {
+                // Guardamos la imagen en la tabla de imágenes
+                $controlador->guardarImagen($id_producto, $file);
             }
+            break;
+
 
         case "eliminarProducto":
             $id = $_GET["id"];
@@ -163,53 +167,75 @@ if (isset($_GET['action'])) {
         case "editarProductoxid":
             $id = $_POST["idProducto"];
             $nombre = $_POST["nombre"];
-            $descripcion = $_POST["descripcion"];
+            $descripcion = $_POST["especificaciones"];
             $precio = $_POST["precio"];
-            $talla = $_POST["talla"];
+            $marca = $_POST["marca"];
+            $modelo = $_POST["modelo"];
             $categoria = $_POST["categoria"];
-            if (isset($_FILES['cover']['name']) && $_FILES['cover']['name'] == "") {
+            if ($_FILES['cover']['name']==NULL && $_FILES['cover']['name'] == "") {
 
-                $controlador->editarProductosinFoto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file, $id);
+
+                $controlador->editarProductosinFoto($nombre, $descripcion, $precio, $marca, $modelo, $categoria,$id);
+
 
             } else {
-                $imagen = $controlador->consultarImagen($id);
-                if ($imagen["imagen"] != "") {
-                    $ruta = "uploads/" . $imagen["imagen"];
+                $imagen = $controlador->consultarImagen($id);}
+                while ($fila = $imagen->fetch_assoc()) {
+                if ($fila["nombre_archivo"] != "") {
+                    $ruta = "uploads/" . $fila["nombre_archivo"];
                     if (file_exists($ruta)) {
                         unlink($ruta);
                     }
-                }
-                $ruta_indexphp = "uploads/";
-                $extensiones = array('image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/webp');
-                $max_tamanyo = 1024 * 1024 * 16; // 16 MB
-                $imagen = $_FILES['imagen']['name'];
-                $ruta_fichero_origen = $_FILES['imagen']['tmp_name'];
-                $ruta_nuevo_destino = $ruta_indexphp . $imagen;
+                }else{
+                            // Datos de la imagen y el producto
+                    $ruta_indexphp = "uploads";
+                    $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
+                    $max_tamanyo = 1024 * 1024 * 16; // 16MB
 
-                if (in_array($_FILES['imagen']['type'], $extensiones)) {
-                    // Validar tamaño
-                    if ($_FILES['imagen']['size'] < $max_tamanyo) {
-                        if (file_exists($ruta_nuevo_destino)) {
-                            $nombre_sin_ext = pathinfo($imagen, PATHINFO_FILENAME);
-                            $extension = pathinfo($imagen, PATHINFO_EXTENSION);
-                            $imagen = $nombre_sin_ext . '_' . uniqid() . '.' . $extension;
-                            $ruta_nuevo_destino = $ruta_indexphp . $imagen;
-                        }
-                        if (move_uploaded_file($ruta_fichero_origen, $ruta_nuevo_destino)) {
+                    // Array para almacenar los nombres de las imágenes subidas
+                    $nombres_archivos = array(); 
+
+                    // Subir todas las imágenes
+                    foreach ($_FILES['cover']['name'] as $key => $nombre_archivo) {
+                        $tipo = $_FILES['cover']['type'][$key];
+                        $tamano = $_FILES['cover']['size'][$key];
+                        $tmp_name = $_FILES['cover']['tmp_name'][$key];
+
+                        // Verificamos que la extensión sea válida y el tamaño sea correcto
+                        if (in_array($tipo, $extensiones) && $tamano < $max_tamanyo) {
+                            // Crear una ruta única para la imagen (puedes agregar un prefijo único para evitar sobreescribir)
+                            $nombre_archivo = time() . '_' . basename($nombre_archivo);
+                            $ruta_nuevo_destino = $ruta_indexphp . '/' . $nombre_archivo;
                         } else {
-                            echo 'Error al guardar la imagen.';
+                            echo 'El archivo no es una imagen válida.';
                             exit;
                         }
-                    } else {
-                        echo 'La imagen es demasiado grande.';
-                        exit;
-                    }
-                } else {
-                    echo 'El archivo no es una imagen válida.';
-                    exit;
-                }
-                $file = $cover;
-                $controlador->editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $file, $id);
+
+                            // Mover el archivo a la carpeta de destino
+                            if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
+                                $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
+                            }
+
+                        }
+                
+                        }
+                        }
+            
+
+            // Resto de los datos del formulario
+            $nombre = $_POST["nombre"];
+            $especificacion = $_POST["especificaciones"];
+            $precio = $_POST["precio"];
+            $marca = $_POST["marca"];
+            $modelo = $_POST["modelo"];
+            $tipo = $_POST["categoria"];
+            // Editamos el producto
+                $controlador->editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo,$id);
+            
+            foreach ($nombres_archivos as $file) {
+                // Guardamos la imagen en la tabla de imágenes
+                $controlador->guardarImagen($id, $file);
+
             }
             break;
         case "verProducto":

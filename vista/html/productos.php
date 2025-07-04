@@ -48,7 +48,7 @@
               enctype="multipart/form-data">
               <input type="hidden" value="<?php echo $fila3["id_producto"] ?>" id="idProducto" name="idProducto">
               <input type="text" value="<?php echo $fila3["nombre"] ?>" id="nombre" name="nombre" required>
-              <input type="text" value="<?php echo $fila3["especificaciones"] ?>" id="descripcion" name="especificaciones" required>
+              <input type="text" value="<?php echo $fila3["especificaciones"] ?>" id="especificaciones" name="especificaciones" required>
               <input type="number" value="<?php echo $fila3["precio"] ?>" id="precio" name="precio" required>
               <input type="text" value="<?php echo $fila3["marca"] ?>" id="marca" name="marca" required>
               <input type="text" value="<?php echo $fila3["modelo"] ?>" id="modelo" name="modelo" required>
@@ -64,7 +64,7 @@
                 }
                 ?>
               </select>
-              <input id="cover" class="upload" name="cover" type="file">
+              <input id="cover" class="upload" name="cover[]" type="file" multiple>
               <button type="submit">Editar Producto</button>
             </form>
             <?php
@@ -75,8 +75,8 @@
               <input type="text" placeholder="Nombre del producto" id="nombre" name="nombre" required>
               <input type="text" placeholder="Especificacion de Producto" id="especificacion" name="especificacion" required>
               <input type="number" placeholder="Precio" id="precio" name="precio" required>
-              <input type="text" placeholder="Marca" id="talla" name="marca" required>
-              <input type="text" placeholder="Modelo" id="talla" name="modelo" required>
+              <input type="text" placeholder="Marca" id="marca" name="marca" required>
+              <input type="text" placeholder="Modelo" id="modelo" name="modelo" required>
               <select id="categoria" name="categoria" required>
                 <option value="">Seleccionar Tipo</option>
                 <?php

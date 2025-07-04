@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda de Computadoras y Repuestos</title>
   <link rel="stylesheet" href="vista/css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <script src="Vista/jquery/jquery.js"></script>
   <script src="Vista/js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -45,8 +47,10 @@
     <h2>Catálogo de Productos</h2>
     <div class="productos">
       <?php
+      while ($img = $imagenes->fetch_assoc()) {
+        $imagenes_array[] = $img;
+      }
       if (isset($productos) && $productos->num_rows > 0) {
-
         while ($fila1 = $productos->fetch_assoc()) {
           if (!isset($fila1["imagen"]) || $fila1["imagen"] == NULL) {
             $rutaImagen = "vista/imagenes/sinFoto.jpg";
@@ -55,7 +59,33 @@
           }
           ?>
           <div class="producto">
-            <img src="<?php echo $rutaImagen; ?>">
+            <div id="carouselExample<?php echo $fila1["id_producto"] ?>" class="carousel slide">
+              <div class="carousel-inner">
+                <?php
+                  $activa = true;
+
+                  foreach ($imagenes_array as $fila2) {
+                      if ($fila2["id_producto"] == $fila1["id_producto"]) {
+                      echo "<div class='carousel-item " . ($activa ? 'active' : '') . "'>";
+                      echo "<img src='uploads/{$fila2["nombre_archivo"]}' alt='...'>";
+                      echo "</div>";
+                      $activa = false;
+                    }
+                  }
+                
+
+                ?>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+
             <h3><?php echo $fila1["nombre"]; ?></h3>
             <p>Especificacion:<?php echo $fila1["especificaciones"]; ?></p>
             <p>Marca: <?php echo $fila1["marca"]; ?></p>

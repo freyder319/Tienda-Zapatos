@@ -85,3 +85,25 @@ footer {
   padding: 1rem;
   margin-top: 2rem;
 }
+.producto {
+  width: 300px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.producto .carousel {
+  width: 100%;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.producto .carousel img {
+  width: 100%;
+  padding: 10px;
+  height: auto;
+  object-fit: contain;
+}
+
