@@ -42,17 +42,37 @@
                     <thead>
                         <tr>
                             <th>Nombre producto</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
                             <th>Cantidad</th>
+                            <th>Precio por unidad</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($carritoCliente as $producto) { ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($producto["idProducto"]); ?></td>
+                                <td><?php echo htmlspecialchars($producto["nombre"]); ?></td>
+                                <td><?php echo htmlspecialchars($producto["marca"]); ?></td>
+                                <td><?php echo htmlspecialchars($producto["modelo"]); ?></td>
                                 <td><?php echo htmlspecialchars($producto["cantidad"]); ?></td>
+                                <td><?php echo htmlspecialchars($producto["precio"]); ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">Total</td>
+                            <td>
+                                <?php
+                                $total = 0;
+                                foreach ($carritoCliente as $producto) {
+                                    $total += $producto["precio"] * $producto["cantidad"];
+                                }
+                                echo htmlspecialchars($total);
+                                ?>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             <?php } else { ?>
                 <table>
@@ -64,14 +84,14 @@
             <table>
                 <tr>
                     <td>
-                        <form action="index.php?action=realizarPedido" method="post" style="display: inline;">
-                            <input type="hidden" name="idCliente" value="<?php echo $_SESSION['id'] ?>">
-                            <button type="submit">Realizar Pedido</button>
+                        <form action="index.php?action=confirmarPedido" method="post" style="display: inline;">
+                            <input type="hidden" name="idCliente">
+                            <button type="submit">Confirmar pedido</button>
                         </form>
                     </td>
                     <td>
                         <form action="index.php?action=eliminarCarrito" method="post" style="display: inline; ">
-                            <input type="hidden" name="idCliente" value="<?php echo $_SESSION['id'] ?>">
+                            <input type="hidden" name="idCliente">
                             <button type="submit">Eliminar Carrito</button>
                         </form>
                     </td>
