@@ -86,11 +86,12 @@ JOIN categorias ON productos.id_categoria = categorias.id;";
         $nombre=$productos->obtenernombre();
         $descripcion=$productos->obtenerEspecificacion();
         $precio=$productos->obtenerprecio();
-        $talla=$productos->obtenerModelo();
+        $modelo=$productos->obtenerModelo();
+        $marca=$productos->obtenermarca();
         $categoria=$productos->obtenertipo();
         $conexion=new conexion;
         $conexion->abrir();
-        $sql="UPDATE productos SET nombre='$nombre', precio='$precio', id_categoria='$categoria' WHERE id='$id'";
+        $sql="UPDATE productos SET nombre='$nombre', especificaciones='$descripcion' , precio='$precio', marca='$marca', modelo='$modelo', id_categoria='$categoria' WHERE id='$id'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerFilasAfectadas();
         $conexion->cerrar();
@@ -119,11 +120,12 @@ JOIN categorias ON productos.id_categoria = categorias.id;";
         $nombre=$productos->obtenernombre();
         $descripcion=$productos->obtenerEspecificacion();
         $precio=$productos->obtenerprecio();
-        $talla=$productos->obtenerModelo();
+        $marca=$productos->obtenermarca();
+        $modelo=$productos->obtenerModelo();
         $categoria=$productos->obtenertipo();
         $conexion=new conexion;
         $conexion->abrir();
-        $sql = "UPDATE productos SET nombre='$nombre', precio='$precio', id_categoria='$categoria' WHERE id='$id'";
+        $sql = "UPDATE productos SET nombre='$nombre', especificaciones='$descripcion' , precio='$precio', marca='$marca', modelo='$modelo', id_categoria='$categoria' WHERE id='$id'";
         $conexion->consulta($sql);
         $result = $conexion->obtenerFilasAfectadas();
         $conexion->cerrar();
@@ -190,10 +192,31 @@ JOIN categorias ON productos.id_categoria = categorias.id;";
     {
         $conexion = new conexion;
         $conexion->abrir();
-        $sql = "SELECT imagen FROM productos WHERE id='$id'";
+        $sql = "SELECT nombre_archivo FROM imagenes WHERE id_producto='$id'";
         $conexion->consulta($sql);
-        $result = $conexion->obtenerUnaFila();
+        $result = $conexion->obtenerResultado();
         $conexion->cerrar();
         return $result;
     }
+    public function consultarImagenesProducto(){
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT p.id AS id_producto, p.nombre, i.nombre_archivo
+            FROM productos p
+            LEFT JOIN imagenes i ON p.id = i.id_producto";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResultado();
+        $conexion->cerrar();
+        return $result;
+    }
+    public function eliminarImagenesProducto($id)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "DELETE FROM imagenes WHERE id_producto='$id'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerFilasAfectadas();
+        $conexion->cerrar();
+        return $result;
+    }   
 }
