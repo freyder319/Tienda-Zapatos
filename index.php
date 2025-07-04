@@ -104,7 +104,7 @@ if (isset($_GET['action'])) {
         case "guardarProducto":
             // Datos de la imagen y el producto
             $ruta_indexphp = "uploads";
-            $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
+            $extensiones = array('image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/webp');
             $max_tamanyo = 1024 * 1024 * 16; // 16MB
 
             // Array para almacenar los nombres de las imágenes subidas
