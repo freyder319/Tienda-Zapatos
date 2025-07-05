@@ -34,10 +34,10 @@ if (isset($_GET['action'])) {
             $controlador->verPagina("vista/html/registrarse.php");
             break;
         case "verCarrito":
-            $controlador->verPagina("vista/html/carrito.php");
+                $controlador->mostrarCarrito();
             break;
         case "verMisPedidos":
-            $pedidosCliente = $controlador->consultarMisPedidos($_SESSION["id"]);
+            $pedidosCliente = $controlador->consultarPedidosCliente($_SESSION["id"]);
             break;
         case "cerrarSesion":
             session_destroy();
@@ -104,11 +104,11 @@ if (isset($_GET['action'])) {
         case "guardarProducto":
             // Datos de la imagen y el producto
             $ruta_indexphp = "uploads";
-            $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
+            $extensiones = array('image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/webp');
             $max_tamanyo = 1024 * 1024 * 16; // 16MB
 
             // Array para almacenar los nombres de las imágenes subidas
-            $nombres_archivos = array(); 
+            $nombres_archivos = array();
 
             // Subir todas las imágenes
             foreach ($_FILES['cover']['name'] as $key => $nombre_archivo) {
@@ -130,18 +130,23 @@ if (isset($_GET['action'])) {
                         $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
                     }
 
+                } else {
+                    echo 'El archivo no es una imagen válida.';
+                    exit;
                 }
-        
 
-            // Resto de los datos del formulario
+
+                // Resto de los datos del formulario
 
             $nombre = $_POST["nombre"];
             $especificacion = $_POST["especificacion"];
             $precio = $_POST["precio"];
+
             $marca = $_POST["marca"];
             $modelo = $_POST["modelo"];
             $tipo = $_POST["categoria"];
             $id_producto = $controlador->guardarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
+
 
             // Ahora guardamos las imágenes asociadas a ese producto
             foreach ($nombres_archivos as $file) {
@@ -149,6 +154,7 @@ if (isset($_GET['action'])) {
                 $controlador->guardarImagen($id_producto, $file);
             }
             break;
+
 
         case "eliminarProducto":
             $id = $_GET["id"];
@@ -172,7 +178,9 @@ if (isset($_GET['action'])) {
             $categoria = $_POST["categoria"];
             if ($_FILES['cover']['name']==NULL && $_FILES['cover']['name'] == "") {
 
+
                 $controlador->editarProductosinFoto($nombre, $descripcion, $precio, $marca, $modelo, $categoria,$id);
+
 
             } else {
                      // Datos de la imagen y el producto
@@ -198,6 +206,7 @@ if (isset($_GET['action'])) {
                             echo 'El archivo no es una imagen válida.';
                             exit;
                         }
+
                             // Mover el archivo a la carpeta de destino
                             if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
                                 $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
@@ -219,6 +228,7 @@ if (isset($_GET['action'])) {
             foreach ($nombres_archivos as $file) {
                 // Guardamos la imagen en la tabla de imágenes
                 $controlador->guardarImagen($id, $file);
+
             }
             break;
         case "verProducto":
@@ -263,7 +273,12 @@ if (isset($_GET['action'])) {
             $estado = $_POST["estado"];
             $controlador->actualizarEstadoPedido($id, $estado);
             break;
-
+        case "eliminarCarrito":
+            $controlador->eliminarCarrito();
+            break;
+        case "confirmarPedido":
+            $controlador->confirmarPedido();
+            break;
         // =======================
         // Default (inicio)
         // =======================
