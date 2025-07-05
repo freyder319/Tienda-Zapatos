@@ -85,13 +85,13 @@ class Controlador
         $gestor = new GestorProducto;
         $productosxid = $gestor->consultarProductosxid($id);
         $productos = $gestor->consultarProductos();
+        $imagenes = $gestor->consultarImagenesxid($id);
         $categorias = $gestor->consultarCategorias();
         $categoriasSelect = $gestor->consultarCategorias();
         require_once("vista/html/productos.php");
     }
 
-    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo,$id)
-
+    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo,$id){
         $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
         $gestor = new GestorProducto;
         $gestor->editarProducto($producto, $id);
@@ -259,10 +259,16 @@ class Controlador
         $gestor->actualizarEstadoPedido($id, $estado);
         header("location:index.php?action=verPedidos");
     }
-    public function consultarPedidosCliente($id)
-    {
-        $gestor = new GestorPedido;
-        $pedidosCliente = $gestor->consultarPedidosCliente($id);
-        require_once("vista/html/misPedidos.php");
+    public function eliminarImagen($id){
+        $gestor = new GestorProducto;
+        $imagen = $gestor->consultarImagenxid($id);
+        if ($imagen) {
+            $ruta = "uploads/" . $imagen['nombre_archivo'];
+            if (file_exists($ruta)) {
+                unlink($ruta);
+            }
+        }
+        $gestor->eliminarImagen($id);
+        header("location:index.php?action=verAdministracion");
     }
 }
