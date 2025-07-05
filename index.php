@@ -138,7 +138,6 @@ if (isset($_GET['action'])) {
             $nombre = $_POST["nombre"];
             $especificacion = $_POST["especificacion"];
             $precio = $_POST["precio"];
-
             $marca = $_POST["marca"];
             $modelo = $_POST["modelo"];
             $tipo = $_POST["categoria"];
@@ -154,6 +153,10 @@ if (isset($_GET['action'])) {
         case "eliminarProducto":
             $id = $_GET["id"];
             $controlador->eliminarProducto($id);
+            break;
+        case "borrarImagen":
+            $id = $_GET["id"];
+            $controlador->eliminarImagen($id);
             break;
         case "editarProducto":
             $id = $_GET["id"];
@@ -172,15 +175,7 @@ if (isset($_GET['action'])) {
                 $controlador->editarProductosinFoto($nombre, $descripcion, $precio, $marca, $modelo, $categoria,$id);
 
             } else {
-                $imagen = $controlador->consultarImagen($id);}
-                while ($fila = $imagen->fetch_assoc()) {
-                if ($fila["nombre_archivo"] != "") {
-                    $ruta = "uploads/" . $fila["nombre_archivo"];
-                    if (file_exists($ruta)) {
-                        unlink($ruta);
-                    }
-                }else{
-                            // Datos de la imagen y el producto
+                     // Datos de la imagen y el producto
                     $ruta_indexphp = "uploads";
                     $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
                     $max_tamanyo = 1024 * 1024 * 16; // 16MB
@@ -210,10 +205,7 @@ if (isset($_GET['action'])) {
 
                         }
                 
-                        }
-                        }
-            
-
+            }
             // Resto de los datos del formulario
             $nombre = $_POST["nombre"];
             $especificacion = $_POST["especificaciones"];
@@ -247,6 +239,7 @@ if (isset($_GET['action'])) {
                 $cantidad
             );
             break;
+            
 
         // =======================
         // Pedidos

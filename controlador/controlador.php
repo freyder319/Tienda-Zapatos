@@ -85,6 +85,7 @@ class Controlador
         $gestor = new GestorProducto;
         $productosxid = $gestor->consultarProductosxid($id);
         $productos = $gestor->consultarProductos();
+        $imagenes = $gestor->consultarImagenesxid($id);
         $categorias = $gestor->consultarCategorias();
         $categoriasSelect = $gestor->consultarCategorias();
         require_once("vista/html/productos.php");
@@ -213,5 +214,17 @@ class Controlador
         $gestor = new GestorPedido;
         $gestor->actualizarEstadoPedido($id, $estado);
         header("location:index.php?action=verPedidos");
+    }
+    public function eliminarImagen($id){
+        $gestor = new GestorProducto;
+        $imagen = $gestor->consultarImagenxid($id);
+        if ($imagen) {
+            $ruta = "uploads/" . $imagen['nombre_archivo'];
+            if (file_exists($ruta)) {
+                unlink($ruta);
+            }
+        }
+        $gestor->eliminarImagen($id);
+        header("location:index.php?action=verAdministracion");
     }
 }

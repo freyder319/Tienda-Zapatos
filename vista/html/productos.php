@@ -53,7 +53,7 @@
               <input type="text" value="<?php echo $fila3["marca"] ?>" id="marca" name="marca" required>
               <input type="text" value="<?php echo $fila3["modelo"] ?>" id="modelo" name="modelo" required>
               <select id="categoria" name="categoria" required>
-                <option value="">Seleccionar categoría</option>
+                <option value="">Seleccionar Tipo</option>
                 <?php
                 while ($fila2 = $categoriasSelect->fetch_assoc()) {
                   ?>
@@ -64,6 +64,24 @@
                 }
                 ?>
               </select>
+              <div class="galeria-imagenes">
+                <?php 
+                while ($fila4 = $imagenes->fetch_assoc()) {
+                  if ($fila4["id_producto"] == $fila3["id_producto"]) {
+                ?>
+                    <a href="index.php?action=borrarImagen&id=<?php echo $fila4["id"] ?>" class="imagenEliminar" onclick="return confirm('¿Estás seguro de que quieres eliminar esta imagen?');">
+                      <img class="imagenes" src="uploads/<?php echo $fila4["nombre_archivo"] ?>" alt="Imagen del producto">
+                      <div class="contenedor_basurero">
+                        <img class="icono_basura" src="vista/imagenes/borrar.png" alt="Eliminar">
+                      </div>
+                    </a>
+
+
+                <?php
+                  }
+                }
+                ?>
+              </div>
               <input id="cover" class="upload" name="cover[]" type="file" multiple>
               <button type="submit">Editar Producto</button>
             </form>
