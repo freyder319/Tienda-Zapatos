@@ -174,11 +174,7 @@ if (isset($_GET['action'])) {
             $modelo = $_POST["modelo"];
             $categoria = $_POST["categoria"];
             if ($_FILES['cover']['name']==NULL && $_FILES['cover']['name'] == "") {
-
-
                 $controlador->editarProductosinFoto($nombre, $descripcion, $precio, $marca, $modelo, $categoria,$id);
-
-
             } else {
                      // Datos de la imagen y el producto
                     $ruta_indexphp = "uploads";
