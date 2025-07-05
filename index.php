@@ -128,14 +128,12 @@ if (isset($_GET['action'])) {
                     // Mover el archivo a la carpeta de destino
                     if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
                         $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
-                    } else {
+            } else {
                     echo 'El archivo no es una imagen válida.';
                     exit;
                 }
-
-
                 // Resto de los datos del formulario
-
+            }
             $nombre = $_POST["nombre"];
             $especificacion = $_POST["especificacion"];
             $precio = $_POST["precio"];
@@ -144,15 +142,12 @@ if (isset($_GET['action'])) {
             $modelo = $_POST["modelo"];
             $tipo = $_POST["categoria"];
             $id_producto = $controlador->guardarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
-
-
             // Ahora guardamos las imágenes asociadas a ese producto
             foreach ($nombres_archivos as $file) {
                 // Guardamos la imagen en la tabla de imágenes
                 $controlador->guardarImagen($id_producto, $file);
             }
             break;
-            }
         case "eliminarProducto":
             $id = $_GET["id"];
             $controlador->eliminarProducto($id);

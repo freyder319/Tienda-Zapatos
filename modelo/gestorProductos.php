@@ -113,11 +113,9 @@ class GestorProducto
         productos.especificaciones,
         productos.precio,
         productos.modelo,
-        productos.marca,
-        imagenes.nombre_archivo as imagen
+        productos.marca
         FROM productos
-        JOIN categorias ON productos.id_categoria = categorias.id
-        LEFT JOIN imagenes ON productos.id = imagenes.id_producto";
+        JOIN categorias ON productos.id_categoria = categorias.id";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResultado();
         $conexion->cerrar();

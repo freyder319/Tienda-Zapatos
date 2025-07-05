@@ -54,8 +54,6 @@
         while ($fila1 = $productos->fetch_assoc()) {
           if (!isset($fila1["imagen"]) || $fila1["imagen"] == NULL) {
             $rutaImagen = "vista/imagenes/sinFoto.jpg";
-          } else {
-            $rutaImagen = "uploads/" . $fila1["imagen"];
           }
           ?>
           <div class="producto">
@@ -67,7 +65,7 @@
                   foreach ($imagenes_array as $fila2) {
                       if ($fila2["id_producto"] == $fila1["id_producto"]) {
                       echo "<div class='carousel-item " . ($activa ? 'active' : '') . "'>";
-                      echo "<img src='uploads/{$fila2["nombre_archivo"]}' alt='...'>";
+                      echo '<img src="uploads/' . $fila2['nombre_archivo'] . '" alt="...">';
                       echo "</div>";
                       $activa = false;
                     }
@@ -112,7 +110,7 @@
           <h3>Aun no hay productos disponibles.</h3>
         </div>
         <?php
-      } ?>
+      }?>
     </div>
   </section>
 
