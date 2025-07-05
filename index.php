@@ -128,9 +128,7 @@ if (isset($_GET['action'])) {
                     // Mover el archivo a la carpeta de destino
                     if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
                         $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
-                    }
-
-                } else {
+                    } else {
                     echo 'El archivo no es una imagen válida.';
                     exit;
                 }
@@ -154,8 +152,7 @@ if (isset($_GET['action'])) {
                 $controlador->guardarImagen($id_producto, $file);
             }
             break;
-
-
+            }
         case "eliminarProducto":
             $id = $_GET["id"];
             $controlador->eliminarProducto($id);

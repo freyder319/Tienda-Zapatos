@@ -91,8 +91,7 @@ class Controlador
         require_once("vista/html/productos.php");
     }
 
-    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo,$id)
-
+    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo,$id){
         $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
         $gestor = new GestorProducto;
         $gestor->editarProducto($producto, $id);
