@@ -179,6 +179,7 @@ class Controlador
     {
         $gestor = new GestorProducto;
         $productos = $gestor->consultarProductosCategoria($categoria);
+        $imagenes = $gestor->consultarImagenesProducto();
         $categorias = $gestor->consultarCategorias();
         $categoriasSelect = $gestor->consultarCategorias();
         require_once("vista/html/catalogo.php");
@@ -244,11 +245,7 @@ class Controlador
             unset($_SESSION['carrito']);
             echo "<script>alert('Carrito eliminado.');</script>"
                 . "<script>window.location.href='index.php?action=verInicio';</script>";
-        } else {
-            echo "<script>alert('El carrito ya está vacío.');</script>"
-                . "<script>window.location.href='index.php?action=verInicio';</script>";
-            return;
-        }
+        } 
     }
 
     public function eliminarProductoCarrito($idProducto)
@@ -312,6 +309,18 @@ class Controlador
             echo "<script>alert('El carrito está vacio.');</script>"
                 . "<script>window.location.href='index.php?action=verInicio';</script>";
         }
+    }
+
+    public function cancelarPedido($id)
+    {
+        $gestor = new GestorPedido;
+        $gestor->cancelarPedido($id);
+        if ($gestor->cancelarPedido($id)) {
+            echo "<script>alert('Pedido cancelado exitosamente.');</script>";
+        } else {
+            echo "<script>alert('Error al cancelar el pedido.');</script>";
+        }
+        header("location:index.php?action=verMisPedidos");
     }
 
     public function consultarPedidos()

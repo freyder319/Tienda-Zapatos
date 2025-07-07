@@ -76,5 +76,18 @@ class GestorPedido
         $result = $conexion->obtenerResultado();
         $conexion->cerrar();
         return $result;
+    } 
+
+    public function cancelarPedido($id)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "UPDATE pedidos 
+        SET estado='Cancelado' 
+        WHERE id='$id'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerFilasAfectadas();
+        $conexion->cerrar();
+        return $result;
     }
 }

@@ -45,6 +45,7 @@
                             <th>Fecha</th>
                             <th>Estado</th>
                             <th>Total</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,6 +56,16 @@
                                 <td><?php echo $fila4["fecha"] ?></td>
                                 <td><?php echo $fila4["estado"] ?></td>
                                 <td><?php echo $fila4["total"] ?></td>
+                                <?php
+                                if ($fila4["estado"] == "Pendiente") {
+                                    ?>
+                                    <td>
+                                        <a href="index.php?action=consultarProductosPedido&idPedido=<?php echo $fila4['pedido_id'] ?>">
+                                            <button type="button">Ver productos</button></a>
+                                        <button type="button" onclick="confirmarCancelarPedido(<?php echo $fila4['pedido_id'] ?>)">
+                                            Cancelar pedido</button>
+                                    </td>
+                                <?php } ?>
                             </tr>
                         <?php }
             } else { ?>

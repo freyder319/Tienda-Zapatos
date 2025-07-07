@@ -10,7 +10,7 @@ if (isset($_SESSION['rol'])) {
                 <a href="index.php?action=verProducto">Productos</a>
                 <a href="index.php?action=verCategoria">Categorias</a>
                 <a href="index.php?action=verPedidos">Pedidos</a>
-                <a href="index.php?action=cerrarSesion">Cerrar Sesión</a>
+                <a href="#" onclick="confirmarCerrarSesion()">Cerrar Sesión</a>
             </nav>
             <?php
             break;
@@ -21,7 +21,7 @@ if (isset($_SESSION['rol'])) {
                 <a href="index.php?action=verInicio">Catálogo</a>
                 <a href="index.php?action=verCarrito">Carrito</a>
                 <a href="index.php?action=verMisPedidos">Mis pedidos</a>
-                <a href="index.php?action=cerrarSesion">Cerrar Sesión</a>
+                <a href="#" onclick="confirmarCerrarSesion()">Cerrar Sesión</a>
             </nav>
             <?php
             break;
