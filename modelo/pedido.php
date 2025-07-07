@@ -1,17 +1,22 @@
 <?php 
 class Pedido{
+    private $idPedido;
     private $idProducto;
     private $idUsuario;
-    private $cantidad;
     private $fecha;
+    private $estado;
 
-    public function __construct($idProducto, $idUsuario, $cantidad, $fecha) {
+    public function __construct($idPedido, $idProducto, $idUsuario, $fecha, $estado) {
+        $this->idPedido = $idPedido;
         $this->idProducto = $idProducto;
         $this->idUsuario = $idUsuario;
-        $this->cantidad = $cantidad;
         $this->fecha = $fecha;
+        $this->estado = $estado;
     }
 
+    public function obtenerIdPedido() {
+        return $this->idPedido;
+    }
     public function obtenerIdProducto() {
         return $this->idProducto;
     }
@@ -20,11 +25,10 @@ class Pedido{
         return $this->idUsuario;
     }
 
-    public function obtenerCantidad() {
-        return $this->cantidad;
-    }
-
     public function obtenerFecha() {
         return $this->fecha;
+    }
+        public function obtenerEstado() {
+        return $this->estado;
     }
 }

@@ -38,4 +38,7 @@ class Conexion{
     public function ObtenerId(){
         return $this->id;
     }
+    public function obtenerUltimoIdInsertado() {
+        return $this->mySQLI->insert_id;
+    }
 }

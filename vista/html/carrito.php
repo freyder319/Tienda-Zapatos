@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda de Tenis</title>
+    <title>Tienda de Computadoras y Repuestos</title>
     <link rel="stylesheet" href="vista/css/style.css">
     <script src="Vista/jquery/jquery.js"></script>
     <script src="Vista/js/script.js"></script>
@@ -28,7 +28,7 @@
     ?>
 
     <header>
-        <h1>Tienda de Tenis</h1>
+        <h1>Tienda de Computadoras y Repuestos</h1>
         <div id="nav"></div>
     </header>
 
@@ -46,6 +46,7 @@
                             <th>Modelo</th>
                             <th>Cantidad</th>
                             <th>Precio por unidad</th>
+                            <th>Acciones </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +57,9 @@
                                 <td><?php echo htmlspecialchars($producto["modelo"]); ?></td>
                                 <td><?php echo htmlspecialchars($producto["cantidad"]); ?></td>
                                 <td><?php echo htmlspecialchars($producto["precio"]); ?></td>
+                                <td>
+                                    <button onclick="confirmarEliminarProductoCarrito(<?php echo $producto['idProducto']; ?>)">Eliminar</button>
+                                </td>
                             </tr>
                         <?php } ?>
                     </tbody>

@@ -1,10 +1,25 @@
 <?php
 class Controlador
 {
+    // =======================
+    // Sesión y navegación
+    // =======================
     public function verPagina($ruta)
     {
         require_once($ruta);
     }
+
+    public function consultarProductos()
+    {
+        $gestor = new GestorProducto;
+        $productos = $gestor->consultarProductos();
+        $categoriasSelect = $gestor->consultarCategorias();
+        require_once("vista/html/productos.php");
+    }
+
+    // =======================
+    // Usuarios
+    // =======================
     public function validar($correo, $contrasenia)
     {
         $gestor = new GestorUsuario;
@@ -15,13 +30,11 @@ class Controlador
                 $resultado3 = $gestor->consultarDatos($correo);
                 $_SESSION["rol"] = $resultado3["rol"];
                 $_SESSION["id"] = $resultado3["id"];
-
                 if ($_SESSION["rol"] == "admin") {
                     header("location:index.php?action=verAdministracion");
                 } else {
                     header("location:index.php?action=verInicio");
                 }
-
                 $validado = True;
                 return $validado;
             } else {
@@ -31,32 +44,75 @@ class Controlador
             header("location:index.php?action=verAdministracion&error=1");
         }
     }
-    public function consultarProductos()
+
+    public function agregarUsuario($nombre, $correo, $contrasenia)
     {
-        $gestor = new GestorProducto;
-        $productos = $gestor->consultarProductos();
-        $categoriasSelect = $gestor->consultarCategorias();
-        require_once("vista/html/productos.php");
+        $gestor = new GestorUsuario;
+        $gestor->agregarUsuario($nombre, $correo, $contrasenia);
+        $_SESSION["rol"] = "cliente";
+        $_SESSION["id_usuario"] = $gestor->consultarIdUsuario($correo);
+        header("location:index.php?action=verInicio");
     }
+
+    // =======================
+    // Categorías
+    // =======================
     public function guardarCategoria($categoria)
     {
         $gestor = new Categoria;
         $gestor->guardarCategoria($categoria);
         header("location:index.php?action=verAdministracion");
     }
+
     public function eliminarCategoria($id)
     {
         $gestor = new Categoria;
         $gestor->eliminarCategoria($id);
         header("location:index.php?action=verAdministracion");
     }
+
+    public function consultarCategorias()
+    {
+        $gestor = new GestorProducto;
+        $categorias = $gestor->consultarCategorias();
+        require_once("vista/html/categorias.php");
+    }
+
+    public function consultarCategoriaxid($id)
+    {
+        $gestor = new Categoria;
+        $gestor2 = new GestorProducto;
+        $categoriaxid = $gestor->consultarCategoriaxid($id);
+        $productos = $gestor2->consultarProductos();
+        $categorias = $gestor2->consultarCategorias();
+        $categoriasSelect = $gestor2->consultarCategorias();
+        require_once("vista/html/admin.php");
+    }
+
+    public function guardarCategoriaNueva($id, $nombre)
+    {
+        $gestor = new Categoria;
+        $gestor->editarCategoria($id, $nombre);
+        header("location:index.php?action=verAdministracion");
+    }
+
+    // =======================
+    // Productos
+    // =======================
     public function guardarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo)
     {
         $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
         $gestor = new GestorProducto;
         $idProducto = $gestor->agregarProducto($producto);
-        return $idProducto;
+
+        if (!$idProducto) {
+            echo "<script>alert('Error al agregar el producto');</script>";
+            return null;
+        } else {
+            return $idProducto;
+        }
     }
+
     public function guardarImagen($id_producto, $file)
     {
         $gestor = new GestorProducto;
@@ -64,6 +120,7 @@ class Controlador
         echo "<script>alert('Producto agregado correctamente');</script>";
         header("location:index.php?action=verAdministracion");
     }
+
     public function eliminarProducto($id)
     {
         $gestor = new GestorProducto;
@@ -80,6 +137,7 @@ class Controlador
         $gestor->eliminarProducto($id);
         header("location:index.php?action=verAdministracion");
     }
+
     public function consultarProductosxid($id)
     {
         $gestor = new GestorProducto;
@@ -90,43 +148,44 @@ class Controlador
         require_once("vista/html/productos.php");
     }
 
-    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo,$id)
-
+    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $id): void
+    {
         $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
         $gestor = new GestorProducto;
         $gestor->editarProducto($producto, $id);
         header("location:index.php?action=verAdministracion");
     }
-    public function agregarUsuario($nombre, $correo, $contrasenia)
+
+    public function editarProductosinFoto($nombre, $especificacion, $precio, $marca, $modelo, $categoria, $id)
     {
-        $gestor = new GestorUsuario;
-        $gestor->agregarUsuario($nombre, $correo, $contrasenia);
-        $_SESSION["rol"] = "cliente";
-        $_SESSION["id_usuario"] = $gestor->consultarIdUsuario($correo);
-        header("location:index.php?action=verInicio");
+        $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $categoria);
+        $gestor = new GestorProducto;
+        $gestor->editarProductoSinFoto($producto, $id);
+        header("location:index.php?action=verAdministracion");
     }
+
     public function consultarProductosCategoria()
     {
         $gestor = new GestorProducto;
         $productos = $gestor->consultarProductosTotales();
-        $imagenes= $gestor->consultarImagenesProducto();
+        $imagenes = $gestor->consultarImagenesProducto();
         $categorias = $gestor->consultarCategorias();
         $categoriasSelect = $gestor->consultarCategorias();
         require_once("vista/html/catalogo.php");
     }
-    public function PedidoFormulario($id)
+
+    public function consultarProductosCategoriaxid($categoria)
     {
         $gestor = new GestorProducto;
-        $id = $id;
-        require_once("vista/html/realizarPedido.php");
+        $productos = $gestor->consultarProductosCategoria($categoria);
+        $categorias = $gestor->consultarCategorias();
+        $categoriasSelect = $gestor->consultarCategorias();
+        require_once("vista/html/catalogo.php");
     }
-    public function guardarPedido($id, $idUsuario, $cantidad, $fecha)
-    {
-        $gestor = new GestorPedido;
-        $pedido = new Pedido($id, $idUsuario, $cantidad, $fecha);
-        $gestor->guardarPedido($pedido);
-        header("location:index.php?action=verInicio&mensaje=1");
-    }
+
+    // =======================
+    // Carrito
+    // =======================
     public function agregarCarrito($idProducto, $cantidad)
     {
         $idProducto = (string) $idProducto;
@@ -171,19 +230,56 @@ class Controlador
             exit;
         }
     }
+
     public function mostrarCarrito()
     {
         $carritoCliente = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
         require_once("vista/html/carrito.php");
     }
+
     public function eliminarCarrito()
     {
         if (isset($_SESSION['carrito'])) {
             unset($_SESSION['carrito']);
+            echo "<script>alert('Carrito eliminado.');</script>"
+                . "<script>window.location.href='index.php?action=verInicio';</script>";
+        } else {
+            echo "<script>alert('El carrito ya está vacío.');</script>"
+                . "<script>window.location.href='index.php?action=verInicio';</script>";
+            return;
         }
-        echo "<script>alert('Carrito eliminado.');</script>"
-            . "<script>window.location.href='index.php?action=verInicio';</script>";
     }
+
+    public function eliminarProductoCarrito($idProducto)
+    {
+        if (isset($_SESSION['carrito'][$idProducto])) {
+            unset($_SESSION['carrito'][$idProducto]);
+            echo "<script>alert('Producto eliminado del carrito.');</script>"
+                . "<script>window.location.href='index.php?action=verCarrito';</script>";
+        } else {
+            echo "<script>alert('El producto no está en el carrito.');</script>"
+                . "<script>window.location.href='index.php?action=verCarrito';</script>";
+        }
+    }
+
+    // =======================
+    // Pedidos
+    // =======================
+    public function PedidoFormulario($id)
+    {
+        $gestor = new GestorProducto;
+        $id = $id;
+        require_once("vista/html/realizarPedido.php");
+    }
+
+    public function guardarPedido($idProducto, $idUsuario, $fecha)
+    {
+        $gestor = new GestorPedido;
+        $pedido = new Pedido(NULL, $idProducto, $idUsuario, $fecha, 'pendiente');
+        $gestor->guardarPedido($pedido);
+        header("location:index.php?action=verInicio&mensaje=1");
+    }
+
     public function confirmarPedido()
     {
         if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
@@ -201,68 +297,39 @@ class Controlador
             unset($_SESSION['carrito']);
             header("location:index.php?action=verInicio&mensaje=2");
         } else {
-            header("location:index.php?action=verInicio&mensaje=3");
+            echo "<script>alert('El carrito está vacio.');</script>"
+                . "<script>window.location.href='index.php?action=verInicio';</script>";
         }
     }
-    public function consultarProductosCategoriaxid($categoria)
-    {
-        $gestor = new GestorProducto;
-        $productos = $gestor->consultarProductosCategoria($categoria);
-        $categorias = $gestor->consultarCategorias();
-        $categoriasSelect = $gestor->consultarCategorias();
-        require_once("vista/html/catalogo.php");
-    }
-    public function consultarCategoriaxid($id)
-    {
-        $gestor = new Categoria;
-        $gestor2 = new GestorProducto;
-        $categoriaxid = $gestor->consultarCategoriaxid($id);
-        $productos = $gestor2->consultarProductos();
-        $categorias = $gestor2->consultarCategorias();
-        $categoriasSelect = $gestor2->consultarCategorias();
-        require_once("vista/html/admin.php");
-    }
-    public function guardarCategoriaNueva($id, $nombre)
-    {
-        $gestor = new Categoria;
-        $gestor->editarCategoria($id, $nombre);
-        header("location:index.php?action=verAdministracion");
-    }
-    public function consultarCategorias()
-    {
-        $gestor = new GestorProducto;
-        $categorias = $gestor->consultarCategorias();
-        require_once("vista/html/categorias.php");
-    }
+
     public function consultarPedidos()
     {
         $gestor = new GestorProducto;
         $pedidos = $gestor->consultarPedidos();
         require_once("vista/html/pedidos.php");
     }
-    public function editarProductosinFoto($nombre, $especificacion, $precio, $marca, $modelo, $categoria, $id)
+
+    public function consultarPedidosCliente($id)
     {
-        $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $categoria);
-        $gestor = new GestorProducto;
-        $gestor->editarProductoSinFoto($producto, $id);
-        header("location:index.php?action=verAdministracion");
+        $gestor = new GestorPedido;
+        $pedidosCliente = $gestor->consultarPedidosCliente($id);
+        require_once("vista/html/misPedidos.php");
     }
-    public function consultarImagen($id)
-    {
-        $gestor = new GestorProducto;
-        $imagen = $gestor->consultarImagen($id);
-        return $imagen;
-    }
+
     public function actualizarEstadoPedido($id, $estado)
     {
         $gestor = new GestorPedido;
         $gestor->actualizarEstadoPedido($id, $estado);
         header("location:index.php?action=verPedidos");
     }
-    public function consultarPedidosCliente($id)
+
+    // =======================
+    // Imágenes
+    // =======================
+    public function consultarImagen($id)
     {
-        $gestor = new GestorPedido;
-        $pedidosCliente = $gestor->consultarPedidosCliente($id);
-        require_once("vista/html/misPedidos.php");
+        $gestor = new GestorProducto;
+        $imagen = $gestor->consultarImagen($id);
+        return $imagen;
     }
 }

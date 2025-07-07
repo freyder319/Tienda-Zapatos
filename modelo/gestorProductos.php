@@ -40,11 +40,12 @@ class GestorProducto
         $categoria = $productos->obtenertipo();
         $conexion = new conexion;
         $conexion->abrir();
-        $sql = "INSERT INTO productos VALUES (NULL,'$nombre','$especificacion','$precio','$categoria','$marca','$modelo','$categoria')";
+        $sql = "INSERT INTO productos (nombre, especificaciones, precio, id_categoria, marca, modelo, tipo) 
+                VALUES ('$nombre', '$especificacion', '$precio', '$categoria', '$marca', '$modelo', '$categoria')";
         $conexion->consulta($sql);
-        $result = $conexion->ObtenerId();
+        $ultimoId = $conexion->obtenerUltimoIdInsertado();
         $conexion->cerrar();
-        return $result;
+        return $ultimoId;
     }
     public function guardarImagen($id_producto, $file)
     {
@@ -86,6 +87,16 @@ class GestorProducto
         return $result;
     }
 
+    public function consultarUltimoIdProducto()
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT MAX(id) AS ultimo_id FROM productos";
+        $conexion->consulta($sql);
+        $result = $conexion->ObtenerId();
+        $conexion->cerrar();
+        return $result;
+    }
     public function editarProducto(productos $productos, $id){
         $nombre=$productos->obtenernombre();
         $descripcion=$productos->obtenerEspecificacion();
