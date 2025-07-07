@@ -124,11 +124,9 @@ class GestorProducto
         productos.especificaciones,
         productos.precio,
         productos.modelo,
-        productos.marca,
-        imagenes.nombre_archivo as imagen
+        productos.marca
         FROM productos
-        JOIN categorias ON productos.id_categoria = categorias.id
-        LEFT JOIN imagenes ON productos.id = imagenes.id_producto";
+        JOIN categorias ON productos.id_categoria = categorias.id";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResultado();
         $conexion->cerrar();
@@ -244,4 +242,35 @@ class GestorProducto
         $conexion->cerrar();
         return $result;
     }   
+    public function consultarImagenesxid($id)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT * FROM imagenes WHERE id_producto='$id'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResultado();
+        $conexion->cerrar();
+        return $result;
+    }
+    public function eliminarImagen($id)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "DELETE FROM imagenes WHERE id='$id'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerFilasAfectadas();
+        $conexion->cerrar();
+        return $result;
+    }
+    public function consultarImagenxid($id)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT nombre_archivo FROM imagenes WHERE id='$id'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerUnaFila();
+        $conexion->cerrar();
+        return $result;
+    }
+    
 }

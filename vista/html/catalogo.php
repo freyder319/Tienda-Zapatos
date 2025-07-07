@@ -51,20 +51,26 @@
       while ($img = $imagenes->fetch_assoc()) {
         $imagenes_array[] = $img;
       }
-      // 1. Agrupa imágenes por producto
-$imagenes_por_producto = [];
-foreach ($imagenes_array as $img) {
-    $imagenes_por_producto[$img['id_producto']][] = $img['nombre_archivo'];
-}
+      if (isset($productos) && $productos->num_rows > 0) {
+        while ($fila1 = $productos->fetch_assoc()) {
+          if (!isset($fila1["imagen"]) || $fila1["imagen"] == NULL) {
+            $rutaImagen = "vista/imagenes/sinFoto.jpg";
+          }
+          ?>
+          <div class="producto">
+            <div id="carouselExample<?php echo $fila1["id_producto"] ?>" class="carousel slide">
+              <div class="carousel-inner">
+                <?php
+                  $activa = true;
 
-// 2. Recorre productos únicos
-$productos_array = [];
-while ($fila1 = $productos->fetch_assoc()) {
-    // Evita duplicados por id_producto
-    if (!isset($productos_array[$fila1['id_producto']])) {
-        $productos_array[$fila1['id_producto']] = $fila1;
-    }
-}
+                  foreach ($imagenes_array as $fila2) {
+                      if ($fila2["id_producto"] == $fila1["id_producto"]) {
+                      echo "<div class='carousel-item " . ($activa ? 'active' : '') . "'>";
+                      echo '<img src="uploads/' . $fila2['nombre_archivo'] . '" alt="...">';
+                      echo "</div>";
+                      $activa = false;
+                    }
+                  }
 
 foreach ($productos_array as $fila1) {
     ?>
@@ -116,10 +122,11 @@ foreach ($productos_array as $fila1) {
           <?php
         }
         ?>
-      </div>
-      <?php
-    }
-    ?>
+        <div class="producto">
+          <h3>Aun no hay productos disponibles.</h3>
+        </div>
+        <?php
+      }?>
     </div>
   </section>
 

@@ -126,20 +126,18 @@ if (isset($_GET['action'])) {
                     echo 'El archivo no es una imagen válida.';
                     exit;
                 }
-                // Mover el archivo a la carpeta de destino
-                if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
-                    $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
+                    // Mover el archivo a la carpeta de destino
+                    if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
+                        $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
+            } else {
+                    echo 'El archivo no es una imagen válida.';
+                    exit;
                 }
-
+                // Resto de los datos del formulario
             }
-
-
-            // Resto de los datos del formulario
-
             $nombre = $_POST["nombre"];
             $especificacion = $_POST["especificacion"];
             $precio = $_POST["precio"];
-
             $marca = $_POST["marca"];
             $modelo = $_POST["modelo"];
             $tipo = $_POST["categoria"];
@@ -152,11 +150,13 @@ if (isset($_GET['action'])) {
                 $controlador->guardarImagen($id_producto, $file);
             }
             break;
-
-
         case "eliminarProducto":
             $id = $_GET["id"];
             $controlador->eliminarProducto($id);
+            break;
+        case "borrarImagen":
+            $id = $_GET["id"];
+            $controlador->eliminarImagen($id);
             break;
         case "editarProducto":
             $id = $_GET["id"];
@@ -177,16 +177,7 @@ if (isset($_GET['action'])) {
 
 
             } else {
-                $imagen = $controlador->consultarImagen($id);
-            }
-            while ($fila = $imagen->fetch_assoc()) {
-                if ($fila["nombre_archivo"] != "") {
-                    $ruta = "uploads/" . $fila["nombre_archivo"];
-                    if (file_exists($ruta)) {
-                        unlink($ruta);
-                    }
-                } else {
-                    // Datos de la imagen y el producto
+                     // Datos de la imagen y el producto
                     $ruta_indexphp = "uploads";
                     $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
                     $max_tamanyo = 1024 * 1024 * 16; // 16MB
@@ -209,18 +200,14 @@ if (isset($_GET['action'])) {
                             echo 'El archivo no es una imagen válida.';
                             exit;
                         }
+                            // Mover el archivo a la carpeta de destino
+                            if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
+                                $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
+                            }
 
-                        // Mover el archivo a la carpeta de destino
-                        if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
-                            $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
                         }
-
-                    }
-
-                }
+                
             }
-
-
             // Resto de los datos del formulario
             $nombre = $_POST["nombre"];
             $especificacion = $_POST["especificaciones"];
@@ -254,11 +241,6 @@ if (isset($_GET['action'])) {
                 $id,
                 $cantidad
             );
-            break;
-        
-        case "eliminarProductoCarrito":
-            $id = $_GET["idProducto"];
-            $controlador->eliminarProductoCarrito($id);
             break;
 
         // =======================
