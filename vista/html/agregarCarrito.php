@@ -19,8 +19,8 @@
   <section id="admin">
     <h2>Pedido:</h2>
     <p><strong>Cantidad de producto que quieres pedir:</strong></p>
-    <form action="index.php?action=agregarCarrito" method="post">
-      <input type="hidden" value="<?php echo $id ?>" id="idProducto" name="idProducto">
+    <form action="index.php?action=agregarProductoCarrito" method="post">
+      <input type="hidden" value="<?php echo $idProducto ?>" id="idProducto" name="idProducto">
       <input type="text" placeholder="cantidad" id="cantidad" name="cantidad" required>
       <button type="submit">Agregar al carrito</button>
     </form>

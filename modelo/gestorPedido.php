@@ -1,20 +1,38 @@
 <?php
 
-class GestorPedido{
-    public function guardarPedido($pedido){
-        $idProducto = $pedido->obtenerIdProducto();
+class GestorPedido
+{
+    public function guardarPedido($pedido)
+    {
         $idUsuario = $pedido->obtenerIdUsuario();
-        $cantidad = $pedido->obtenerCantidad();
         $fecha = $pedido->obtenerFecha();
+        $total = $pedido->obtenerTotal();
         $conexion = new conexion;
         $conexion->abrir();
-        $sql = "INSERT INTO pedidos VALUES (NULL, '$idUsuario', '$idProducto', '$cantidad', '$fecha','Pendiente')";
+        $sql = "INSERT INTO pedidos VALUES (NULL, '$idUsuario', '$fecha','Pendiente', '$total')";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerUltimoIdInsertado();
+        $conexion->cerrar();
+        return $result;
+    }
+    public function guardarDetallePedido(DetallePedido $detallePedido)
+    {
+        $idPedido = $detallePedido->obtenerIdPedido();
+        $idProducto = $detallePedido->obtenerIdProducto();
+        $cantidad = $detallePedido->obtenerCantidad();
+        $precio = $detallePedido->obtenerPrecio();
+
+        $subtotal = $cantidad * $precio;
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "INSERT INTO detalle_pedido VALUES (NULL, '$idPedido', '$idProducto', '$cantidad', '$precio', '$subtotal')";
         $conexion->consulta($sql);
         $result = $conexion->obtenerFilasAfectadas();
         $conexion->cerrar();
         return $result;
     }
-    public function actualizarEstadoPedido($id, $estado){
+    public function actualizarEstadoPedido($id, $estado)
+    {
         $conexion = new conexion;
         $conexion->abrir();
         $sql = "UPDATE pedidos SET estado='$estado' WHERE id='$id'";
@@ -23,21 +41,37 @@ class GestorPedido{
         $conexion->cerrar();
         return $result;
     }
-    public function consultarPedidosCliente($id){
+    public function consultarPedidosCliente($id)
+    {
         $conexion = new conexion;
         $conexion->abrir();
         $sql = "SELECT 
         p.id AS pedido_id,
         u.nombre AS nombre_usuario,
-        pr.nombre AS nombre_producto,
-        pr.id as id_producto,
-        p.cantidad,
         p.fecha,
-        p.estado
+        p.estado,
+        p.total
         FROM pedidos p
         INNER JOIN usuarios u ON p.id_usuario = u.id
-        INNER JOIN productos pr ON p.id_producto = pr.id 
         WHERE u.id='$id';";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResultado();
+        $conexion->cerrar();
+        return $result;
+    }
+
+    public function consultarPedidos()
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT 
+        p.id AS pedido_id,
+        u.nombre AS nombre_usuario,
+        p.fecha,
+        p.estado,
+        p.total
+        FROM pedidos p
+        INNER JOIN usuarios u ON p.id_usuario = u.id";
         $conexion->consulta($sql);
         $result = $conexion->obtenerResultado();
         $conexion->cerrar();

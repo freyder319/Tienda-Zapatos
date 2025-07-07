@@ -42,10 +42,9 @@
                     <thead>
                         <tr>
                             <th>ID Pedido</th>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
                             <th>Fecha</th>
                             <th>Estado</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,10 +52,9 @@
                         <?php while ($fila4 = $pedidosCliente->fetch_assoc()) { ?>
                             <tr>
                                 <td><?php echo $fila4["pedido_id"] ?></td>
-                                <td><?php echo $fila4["nombre_producto"] ?></td>
-                                <td><?php echo $fila4["cantidad"] ?></td>
                                 <td><?php echo $fila4["fecha"] ?></td>
                                 <td><?php echo $fila4["estado"] ?></td>
+                                <td><?php echo $fila4["total"] ?></td>
                             </tr>
                         <?php }
             } else { ?>

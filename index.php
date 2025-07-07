@@ -126,10 +126,10 @@ if (isset($_GET['action'])) {
                     echo 'El archivo no es una imagen válida.';
                     exit;
                 }
-                    // Mover el archivo a la carpeta de destino
-                    if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
-                        $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
-            } else {
+                // Mover el archivo a la carpeta de destino
+                if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
+                    $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
+                } else {
                     echo 'El archivo no es una imagen válida.';
                     exit;
                 }
@@ -177,36 +177,36 @@ if (isset($_GET['action'])) {
 
 
             } else {
-                     // Datos de la imagen y el producto
-                    $ruta_indexphp = "uploads";
-                    $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
-                    $max_tamanyo = 1024 * 1024 * 16; // 16MB
+                // Datos de la imagen y el producto
+                $ruta_indexphp = "uploads";
+                $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
+                $max_tamanyo = 1024 * 1024 * 16; // 16MB
 
-                    // Array para almacenar los nombres de las imágenes subidas
-                    $nombres_archivos = array();
+                // Array para almacenar los nombres de las imágenes subidas
+                $nombres_archivos = array();
 
-                    // Subir todas las imágenes
-                    foreach ($_FILES['cover']['name'] as $key => $nombre_archivo) {
-                        $tipo = $_FILES['cover']['type'][$key];
-                        $tamano = $_FILES['cover']['size'][$key];
-                        $tmp_name = $_FILES['cover']['tmp_name'][$key];
+                // Subir todas las imágenes
+                foreach ($_FILES['cover']['name'] as $key => $nombre_archivo) {
+                    $tipo = $_FILES['cover']['type'][$key];
+                    $tamano = $_FILES['cover']['size'][$key];
+                    $tmp_name = $_FILES['cover']['tmp_name'][$key];
 
-                        // Verificamos que la extensión sea válida y el tamaño sea correcto
-                        if (in_array($tipo, $extensiones) && $tamano < $max_tamanyo) {
-                            // Crear una ruta única para la imagen (puedes agregar un prefijo único para evitar sobreescribir)
-                            $nombre_archivo = time() . '_' . basename($nombre_archivo);
-                            $ruta_nuevo_destino = $ruta_indexphp . '/' . $nombre_archivo;
-                        } else {
-                            echo 'El archivo no es una imagen válida.';
-                            exit;
-                        }
-                            // Mover el archivo a la carpeta de destino
-                            if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
-                                $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
-                            }
+                    // Verificamos que la extensión sea válida y el tamaño sea correcto
+                    if (in_array($tipo, $extensiones) && $tamano < $max_tamanyo) {
+                        // Crear una ruta única para la imagen (puedes agregar un prefijo único para evitar sobreescribir)
+                        $nombre_archivo = time() . '_' . basename($nombre_archivo);
+                        $ruta_nuevo_destino = $ruta_indexphp . '/' . $nombre_archivo;
+                    } else {
+                        echo 'El archivo no es una imagen válida.';
+                        exit;
+                    }
+                    // Mover el archivo a la carpeta de destino
+                    if (move_uploaded_file($tmp_name, $ruta_nuevo_destino)) {
+                        $nombres_archivos[] = $nombre_archivo; // Guardamos el nombre de la imagen para agregarla al producto
+                    }
 
-                        }
-                
+                }
+
             }
             // Resto de los datos del formulario
             $nombre = $_POST["nombre"];
@@ -232,7 +232,7 @@ if (isset($_GET['action'])) {
         // Carrito
         // =======================
 
-        case "agregarCarrito":
+        case "agregarProductoCarrito":
             $id = $_POST["idProducto"];
             $idUsuario = $_SESSION["id"];
             $cantidad = $_POST["cantidad"];
@@ -242,19 +242,19 @@ if (isset($_GET['action'])) {
                 $cantidad
             );
             break;
-
-        // =======================
-        // Pedidos
-        // =======================
-        case "realizarPedido":
+        case "frmAgregarProductoCarrito":
             $id = $_GET["id"];
             $controlador->PedidoFormulario($id);
             break;
+        // =======================
+        // Pedidos
+        // =======================
+
         case "agregarPedido":
             $id = $_POST["idProducto"];
             $idUsuario = $_POST["idUsuario"];
             $fecha = date("Y-m-d H:i:s");
-            $controlador->guardarPedido($idProducto, $idUsuario,  $fecha);
+            $controlador->guardarPedido($idProducto, $idUsuario, $fecha);
             break;
         case "verPedidos":
             $productos = $controlador->consultarPedidos();

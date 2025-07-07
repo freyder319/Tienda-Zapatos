@@ -53,49 +53,31 @@
       }
       if (isset($productos) && $productos->num_rows > 0) {
         while ($fila1 = $productos->fetch_assoc()) {
-          if (!isset($fila1["imagen"]) || $fila1["imagen"] == NULL) {
-            $rutaImagen = "vista/imagenes/sinFoto.jpg";
-          }
           ?>
           <div class="producto">
             <div id="carouselExample<?php echo $fila1["id_producto"] ?>" class="carousel slide">
               <div class="carousel-inner">
                 <?php
-                  $activa = true;
-
-                  foreach ($imagenes_array as $fila2) {
-                      if ($fila2["id_producto"] == $fila1["id_producto"]) {
-                      echo "<div class='carousel-item " . ($activa ? 'active' : '') . "'>";
-                      echo '<img src="uploads/' . $fila2['nombre_archivo'] . '" alt="...">';
-                      echo "</div>";
-                      $activa = false;
-                    }
-                  }
-
-foreach ($productos_array as $fila1) {
-    ?>
-    <div class="producto">
-        <div id="carouselExample<?php echo $fila1["id_producto"] ?>" class="carousel slide">
-            <div class="carousel-inner">
-                <?php
-                $imagenes_producto = $imagenes_por_producto[$fila1["id_producto"]] ?? [];
-                if (count($imagenes_producto) > 0) {
-                    $activa = true;
-                    foreach ($imagenes_producto as $img) {
-                        echo "<div class='carousel-item " . ($activa ? 'active' : '') . "'>";
-                        echo "<img src='uploads/{$img}' alt='...'>";
-                        echo "</div>";
-                        $activa = false;
-                    }
-                } else {
-                    // Imagen por defecto
-                    echo "<div class='carousel-item active'>";
-                    echo "<img src='vista/imagenes/sinFoto.jpg' alt='Sin foto'>";
+                $activa = true;
+                $tieneImagen = false;
+                foreach ($imagenes_array as $fila2) {
+                  if ($fila2["id_producto"] == $fila1["id_producto"]) {
+                    echo "<div class='carousel-item " . ($activa ? 'active' : '') . "'>";
+                    echo '<img src="uploads/' . $fila2['nombre_archivo'] . '" alt="...">';
                     echo "</div>";
+                    $activa = false;
+                    $tieneImagen = true;
+                  }
+                }
+                if (!$tieneImagen) {
+                  // Imagen por defecto
+                  echo "<div class='carousel-item active'>";
+                  echo "<img src='vista/imagenes/sinFoto.jpg' alt='Sin foto'>";
+                  echo "</div>";
                 }
                 ?>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="prev">
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
               </button>
@@ -103,30 +85,35 @@ foreach ($productos_array as $fila1) {
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
               </button>
-        </div>
+            </div>
 
-        <h3><?php echo $fila1["nombre"]; ?></h3>
-        <p>Especificacion:<?php echo $fila1["especificaciones"]; ?></p>
-        <p>Marca: <?php echo $fila1["marca"]; ?></p>
-        <p>Tipo: <?php echo $fila1["nombre_categoria"]; ?></p>
-        <p> $<?php echo $fila1["precio"]; ?></p>
-        <?php
-        if (isset($_SESSION["rol"]) && $_SESSION["rol"] == "cliente") {
-          ?>
-          <a href="index.php?action=realizarPedido&id=<?php echo $fila1["id_producto"] ?>"><button>Agregar al
-              carrito</button></a>
-          <?php
-        } else {
-          ?>
-          <p>Registrese para realizar un pedido.</p>
+            <h3><?php echo $fila1["nombre"]; ?></h3>
+            <p>Especificacion: <?php echo $fila1["especificaciones"]; ?></p>
+            <p>Marca: <?php echo $fila1["marca"]; ?></p>
+            <p>Tipo: <?php echo $fila1["nombre_categoria"]; ?></p>
+            <p>$<?php echo $fila1["precio"]; ?></p>
+            <?php
+            if (isset($_SESSION["rol"]) && $_SESSION["rol"] == "cliente") {
+              ?>
+              <a href="index.php?action=frmAgregarProductoCarrito&id=<?php echo $fila1["id_producto"] ?>"><button>Agregar al carrito</button></a>
+              <?php
+            } else {
+              ?>
+              <p>Registrese para realizar un pedido.</p>
+              <?php
+            }
+            ?>
+          </div>
           <?php
         }
+      } else {
         ?>
         <div class="producto">
           <h3>Aun no hay productos disponibles.</h3>
         </div>
         <?php
-      }?>
+      }
+      ?>
     </div>
   </section>
 
