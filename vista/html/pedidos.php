@@ -45,10 +45,9 @@
                 <tr>
                   <th>ID Pedido</th>
                   <th>Cliente</th>
-                  <th>Producto</th>
-                  <th>Cantidad</th>
                   <th>Fecha</th>
                   <th>Estado</th>
+                  <th>Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -58,8 +57,6 @@
                   <tr>
                     <td><?php echo $fila4["pedido_id"] ?></td>
                     <td><?php echo $fila4["nombre_usuario"] ?></td>
-                    <td><?php echo $fila4["nombre_producto"] ?></td>
-                    <td><?php echo $fila4["cantidad"] ?></td>
                     <td><?php echo $fila4["fecha"] ?></td>
                     <td><?php echo $fila4["estado"] ?></td>
                     <td><?php if ($fila4["estado"] == "Completado") {
@@ -87,6 +84,7 @@
                         </form><?php
                     } ?>
                     </td>
+                    <td><?php echo$fila4["total"] ?></td>
                   </tr>
                   <?php
                 }

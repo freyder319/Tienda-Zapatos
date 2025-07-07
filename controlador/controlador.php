@@ -149,7 +149,8 @@ class Controlador
         require_once("vista/html/productos.php");
     }
 
-    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo,$id){
+    public function editarProducto($nombre, $especificacion, $precio, $marca, $modelo, $tipo, $id)
+    {
         $producto = new Productos($nombre, $especificacion, $precio, $marca, $modelo, $tipo);
         $gestor = new GestorProducto;
         $gestor->editarProducto($producto, $id);
@@ -268,8 +269,8 @@ class Controlador
     public function PedidoFormulario($id)
     {
         $gestor = new GestorProducto;
-        $id = $id;
-        require_once("vista/html/realizarPedido.php");
+        $idProducto = $id;
+        require_once("vista/html/agregarCarrito.php");
     }
 
     public function guardarPedido($idProducto, $idUsuario, $fecha)
@@ -285,17 +286,28 @@ class Controlador
         if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
             $gestor = new GestorPedido;
             $fecha = date("Y-m-d H:i:s");
+            $total = 0; 
+
             foreach ($_SESSION['carrito'] as $producto) {
-                $pedido = new Pedido(
+                $total += $producto['precio'] * $producto['cantidad'];
+            }
+
+            $pedido = new Pedido(NULL, $_SESSION['id'], $fecha, 'Pendiente', $total);
+            $idPedido = $gestor->guardarPedido($pedido);
+
+            foreach ($_SESSION['carrito'] as $producto) {
+                $detallePedido = new DetallePedido(
+                    $idPedido,
                     $producto['idProducto'],
-                    $_SESSION["id"],
                     $producto['cantidad'],
-                    $fecha
+                    $producto['precio'],
+                    NULL
                 );
-                $gestor->guardarPedido($pedido);
+                $gestor->guardarDetallePedido($detallePedido);
             }
             unset($_SESSION['carrito']);
-            header("location:index.php?action=verInicio&mensaje=2");
+            echo "<script>alert('Pedido realizado exitosamente.');</script>"
+                . "<script>window.location.href='index.php?action=verInicio';</script>";
         } else {
             echo "<script>alert('El carrito está vacio.');</script>"
                 . "<script>window.location.href='index.php?action=verInicio';</script>";
@@ -304,7 +316,7 @@ class Controlador
 
     public function consultarPedidos()
     {
-        $gestor = new GestorProducto;
+        $gestor = new GestorPedido;
         $pedidos = $gestor->consultarPedidos();
         require_once("vista/html/pedidos.php");
     }
@@ -323,7 +335,8 @@ class Controlador
         header("location:index.php?action=verPedidos");
     }
 
-    public function eliminarImagen($id){
+    public function eliminarImagen($id)
+    {
         $gestor = new GestorProducto;
         $imagen = $gestor->consultarImagenxid($id);
         if ($imagen) {
