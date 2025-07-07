@@ -58,7 +58,8 @@
                                 <td><?php echo htmlspecialchars($producto["cantidad"]); ?></td>
                                 <td><?php echo htmlspecialchars($producto["precio"]); ?></td>
                                 <td>
-                                    <button onclick="confirmarEliminarProductoCarrito(<?php echo $producto['idProducto']; ?>)">Eliminar</button>
+                                    <button
+                                        onclick="confirmarEliminarProductoCarrito(<?php echo $producto['idProducto']; ?>)">Eliminar</button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -84,23 +85,23 @@
                         <td colspan="2">No hay productos registrados.</td>
                     </tr>
                 </table>
+            <?php }
+            if (isset($carritoCliente) && count($carritoCliente) > 0) {
+                ?>
+                <table>
+                    <tr>
+                        <td>
+                            <form action="index.php?action=confirmarPedido" method="post" style="display: inline;">
+                                <input type="hidden" name="idCliente">
+                                <button type="submit">Confirmar pedido</button>
+                            </form>
+                        </td>
+                        <td>
+                            <button onclick="confirmarEliminarCarrito()">Eliminar Carrito</button>
+                        </td>
+                    </tr>
+                </table>
             <?php } ?>
-            <table>
-                <tr>
-                    <td>
-                        <form action="index.php?action=confirmarPedido" method="post" style="display: inline;">
-                            <input type="hidden" name="idCliente">
-                            <button type="submit">Confirmar pedido</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="index.php?action=eliminarCarrito" method="post" style="display: inline; ">
-                            <input type="hidden" name="idCliente">
-                            <button type="submit">Eliminar Carrito</button>
-                        </form>
-                    </td>
-                </tr>
-            </table>
         </div>
     </section>
 

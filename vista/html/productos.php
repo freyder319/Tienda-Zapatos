@@ -48,7 +48,8 @@
               enctype="multipart/form-data">
               <input type="hidden" value="<?php echo $fila3["id_producto"] ?>" id="idProducto" name="idProducto">
               <input type="text" value="<?php echo $fila3["nombre"] ?>" id="nombre" name="nombre" required>
-              <input type="text" value="<?php echo $fila3["especificaciones"] ?>" id="especificaciones" name="especificaciones" required>
+              <input type="text" value="<?php echo $fila3["especificaciones"] ?>" id="especificaciones"
+                name="especificaciones" required>
               <input type="number" value="<?php echo $fila3["precio"] ?>" id="precio" name="precio" required>
               <input type="text" value="<?php echo $fila3["marca"] ?>" id="marca" name="marca" required>
               <input type="text" value="<?php echo $fila3["modelo"] ?>" id="modelo" name="modelo" required>
@@ -65,11 +66,12 @@
                 ?>
               </select>
               <div class="galeria-imagenes">
-                <?php 
+                <?php
                 while ($fila4 = $imagenes->fetch_assoc()) {
                   if ($fila4["id_producto"] == $fila3["id_producto"]) {
-                ?>
-                    <a href="index.php?action=borrarImagen&id=<?php echo $fila4["id"] ?>" class="imagenEliminar" onclick="return confirm('¿Estás seguro de que quieres eliminar esta imagen?');">
+                    ?>
+                    <a href="index.php?action=borrarImagen&id=<?php echo $fila4["id"] ?>" class="imagenEliminar"
+                      onclick="return confirm('¿Estás seguro de que quieres eliminar esta imagen?');">
                       <img class="imagenes" src="uploads/<?php echo $fila4["nombre_archivo"] ?>" alt="Imagen del producto">
                       <div class="contenedor_basurero">
                         <img class="icono_basura" src="vista/imagenes/borrar.png" alt="Eliminar">
@@ -77,7 +79,7 @@
                     </a>
 
 
-                <?php
+                    <?php
                   }
                 }
                 ?>
@@ -136,7 +138,8 @@
                   <td><?php echo $fila["modelo"] ?></td>
                   <td><?php echo $fila["marca"] ?></td>
                   <td>
-                    <a href="index.php?action=editarProducto&id=<?php echo $fila["id_producto"] ?>">Editar</a>
+                    <a href="index.php?action=editarProducto&id=<?php echo $fila["id_producto"] ?>"><button
+                        type="button">Editar</button></a>
                     <a href="index.php?action=eliminarProducto&id=<?php echo $fila['id_producto']; ?>"
                       onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?');"><button
                         type="button">Eliminar</button></a>

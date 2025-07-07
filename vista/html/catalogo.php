@@ -6,10 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tienda de Computadoras y Repuestos</title>
   <link rel="stylesheet" href="vista/css/style.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <script src="Vista/jquery/jquery.js"></script>
   <script src="Vista/js/script.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -77,11 +80,13 @@
                 }
                 ?>
               </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="prev">
+              <button class="carousel-control-prev" type="button"
+                data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
               </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="next">
+              <button class="carousel-control-next" type="button"
+                data-bs-target="#carouselExample<?php echo $fila1["id_producto"] ?>" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
               </button>
@@ -91,11 +96,12 @@
             <p>Especificacion: <?php echo $fila1["especificaciones"]; ?></p>
             <p>Marca: <?php echo $fila1["marca"]; ?></p>
             <p>Tipo: <?php echo $fila1["nombre_categoria"]; ?></p>
-            <p>$<?php echo $fila1["precio"]; ?></p>
+            <p>$<?php echo number_format($fila1["precio"]); ?></p>
             <?php
             if (isset($_SESSION["rol"]) && $_SESSION["rol"] == "cliente") {
               ?>
-              <a href="index.php?action=frmAgregarProductoCarrito&id=<?php echo $fila1["id_producto"] ?>"><button>Agregar al carrito</button></a>
+              <a href="index.php?action=frmAgregarProductoCarrito&id=<?php echo $fila1["id_producto"] ?>"><button>Agregar al
+                  carrito</button></a>
               <?php
             } else {
               ?>
@@ -109,7 +115,7 @@
       } else {
         ?>
         <div class="producto">
-          <h3>Aun no hay productos disponibles.</h3>
+          <h3>No hay productos disponibles en esta categoría.</h3>
         </div>
         <?php
       }

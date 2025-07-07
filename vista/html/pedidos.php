@@ -47,6 +47,7 @@
                   <th>Cliente</th>
                   <th>Fecha</th>
                   <th>Estado</th>
+                  <th></th>
                   <th>Total</th>
                 </tr>
               </thead>
@@ -59,32 +60,35 @@
                     <td><?php echo $fila4["nombre_usuario"] ?></td>
                     <td><?php echo $fila4["fecha"] ?></td>
                     <td><?php echo $fila4["estado"] ?></td>
-                    <td><?php if ($fila4["estado"] == "Completado") {
-                      echo "Completado";
+                    <td><?php if ($fila4["estado"] == "Entregado") {
+                      echo "El pedido ya ha sido entregado.";
                     } else {
                       ?>
                         <form action='index.php?action=actualizarEstadoPedido' method='post'>
                           <input type='hidden' id="pedido_id" name='pedido_id' value="<?php echo $fila4["pedido_id"] ?>">
                           <select name='estado' id="estado">
+                            <option <?php if ($fila4["estado"] == "Entregado") {
+                              echo "selected";
+                            } ?> value='Entregado'> Entregado
+                            </option>
                             <option <?php if ($fila4["estado"] == "Pendiente") {
                               echo "selected";
                             } ?> value='Pendiente'>Pendiente
                             </option>
-                            <option <?php if ($fila4["estado"] == "Enviado") {
+                            <option <?php if ($fila4["estado"] == "En camino") {
                               echo "selected";
-                            } ?> value='Enviado'>Enviado
+                            } ?> value='En camino'>En camino
                             </option>
-                            <option <?php if ($fila4["estado"] == "Completado") {
+                            <option <?php if ($fila4["estado"] == "Cancelado") {
                               echo "selected";
-                            } ?> value='Completado'>
-                              Completado
+                            } ?> value='Cancelado'> Cancelado
                             </option>
                           </select>
                           <button type='submit'>Actualizar</button>
                         </form><?php
                     } ?>
                     </td>
-                    <td><?php echo$fila4["total"] ?></td>
+                    <td><?php echo $fila4["total"] ?></td>
                   </tr>
                   <?php
                 }

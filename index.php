@@ -88,14 +88,14 @@ if (isset($_GET['action'])) {
             $controlador->guardarCategoriaNueva($id, $nombre);
             break;
         case "verCategoria":
-            $productos = $controlador->consultarCategorias();
+            $controlador->consultarCategorias();
             break;
         case "filtrarCategoria":
             $categoria = $_POST["categoria"];
             if ($categoria == "") {
-                $resultado = $controlador->consultarProductosCategoria();
+                $controlador->consultarProductosCategoria();
             } else {
-                $resultado = $controlador->consultarProductosCategoriaxid($categoria);
+                $controlador->consultarProductosCategoriaxid($categoria);
             }
             break;
 
@@ -179,7 +179,7 @@ if (isset($_GET['action'])) {
             } else {
                 // Datos de la imagen y el producto
                 $ruta_indexphp = "uploads";
-                $extensiones = array('image/jpg', 'image/jpeg', 'image/png');
+                $extensiones = array('image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/webp');
                 $max_tamanyo = 1024 * 1024 * 16; // 16MB
 
                 // Array para almacenar los nombres de las imágenes subidas
@@ -246,6 +246,9 @@ if (isset($_GET['action'])) {
             $id = $_GET["id"];
             $controlador->PedidoFormulario($id);
             break;
+        case "eliminarCarrito":
+            $controlador->eliminarCarrito();
+            break;
         // =======================
         // Pedidos
         // =======================
@@ -264,11 +267,18 @@ if (isset($_GET['action'])) {
             $estado = $_POST["estado"];
             $controlador->actualizarEstadoPedido($id, $estado);
             break;
-        case "eliminarCarrito":
-            $controlador->eliminarCarrito();
-            break;
         case "confirmarPedido":
             $controlador->confirmarPedido();
+            break;
+        
+        case "cancelarPedido":
+            $id = $_GET["idPedido"];
+            $controlador->cancelarPedido($id);
+            break;
+        
+        case "consultarProductosPedido":
+            $idPedido = $_POST["idPedido"];
+            $controlador->consultarProductosPedido($idPedido);
             break;
         // =======================
         // Default (inicio)
