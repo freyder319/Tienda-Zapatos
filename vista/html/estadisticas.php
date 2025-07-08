@@ -19,13 +19,33 @@
         <h1>Tienda de Computadoras y Repuestos</h1>
         <div id="nav"></div>
 </header>
+<?php
+$unidadesV= [];
+$categoriaUV=[];
+while ($undxcate = $unidadesVendidas->fetch_assoc()) {
+    $categoriaUV[] = $undxcate["categoria"];
+    $unidadesV[]  = $undxcate["unidades"];
+}
+$productos= [];
+$cantidadesTP=[];
+while ($proxven = $topProductos->fetch_assoc()) {
+    $productos[] = $proxven["producto"];
+    $cantidadesTP[]  = $proxven["unidades"];
+}
+$ingresos= [];
+$categoria2=[];
+while ($ingresosxcat = $ingresosCategoria->fetch_assoc()) {
+    $categoria2[] = $ingresosxcat["categoria"];
+    $ingresos[]   = $ingresosxcat["ingresos"];
+}
+?>
 <br><br>
 <div class="container">
   <div class="row">
     <!-- Unidades por categoría -->
     <div class="col-md-6 mb-4">
       <h3 class="text-center">Unidades vendidas por categoría</h3>
-      <canvas id="ventasCategoriaChart"></canvas>
+      <canvas class="circle" id="ventasCategoriaChart"></canvas>
     </div>
     <!-- Top 10 productos -->
     <div class="col-md-6 mb-4">
@@ -45,21 +65,33 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  // ---------------------- Datos PHP → JS ----------------------
-  const labelsCat  = <?php echo json_encode($labelsCat); ?>;
-  const dataCat    = <?php echo json_encode($dataCat, JSON_NUMERIC_CHECK); ?>;
-  const labelsProd = <?php echo json_encode($labelsProd); ?>;
-  const dataProd   = <?php echo json_encode($dataProd, JSON_NUMERIC_CHECK); ?>;
-  const labelsIng  = <?php echo json_encode($labelsIng); ?>;
-  const dataIng    = <?php echo json_encode($dataIng, JSON_NUMERIC_CHECK); ?>;
-
   // ------------------ Unidades por categoría (pie) ------------
   const ctxCat = document.getElementById('ventasCategoriaChart');
   new Chart(ctxCat, {
     type: 'pie',
     data: {
-      labels: labelsCat,
-      datasets: [{ data: dataCat }]
+      labels: <?php echo json_encode($categoriaUV); ?>,
+      datasets: [{
+        label: 'Unidades vendidas',
+        data: <?php echo json_encode($unidadesV); ?>,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
     },
     options: {
       responsive: true,
@@ -72,10 +104,24 @@ document.addEventListener('DOMContentLoaded', () => {
   new Chart(ctxProd, {
     type: 'bar',
     data: {
-      labels: labelsProd,
+      labels: <?php echo json_encode($productos); ?>,
       datasets: [{
         label: 'Unidades vendidas',
-        data: dataProd,
+        data: <?php echo json_encode($cantidadesTP); ?>,
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(54, 163, 235, 0.37)',
+          'rgba(255, 207, 86, 0.4)',
+          'rgba(75, 192, 192, 0.58)',
+          'rgba(153, 102, 255, 0.36)',
+          'rgba(255, 160, 64, 0.41)'
+        ],
         borderWidth: 1
       }]
     },
@@ -93,10 +139,20 @@ document.addEventListener('DOMContentLoaded', () => {
   new Chart(ctxIng, {
     type: 'bar',
     data: {
-      labels: labelsIng,
+      labels: <?php echo json_encode($categoria2); ?>,
       datasets: [{
         label: 'Ingresos (COP)',
-        data: dataIng,
+        data: <?php echo json_encode($ingresos); ?>,
+        backgroundColor: [
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
         borderWidth: 1
       }]
     },
