@@ -123,6 +123,18 @@
     </div>
   </section>
 
+  <?php
+  // Paginación
+  if (isset($totalPaginas) && $totalPaginas > 1) {
+    echo '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
+    for ($i = 1; $i <= $totalPaginas; $i++) {
+      $active = ($i == $pagina) ? 'active' : '';
+      echo '<li class="page-item ' . $active . '"><a class="page-link" href="index.php?action=catalogoPaginado&pagina=' . $i . '">' . $i . '</a></li>';
+    }
+    echo '</ul></nav>';
+  }
+  ?>
+
   <footer>
     <p>&copy; 2025 Tienda de Tenis. Todos los derechos reservados.</p>
   </footer>

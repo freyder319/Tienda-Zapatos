@@ -22,7 +22,8 @@ if (isset($_GET['action'])) {
         // Sesión y navegación
         // =======================
         case "verInicio":
-            $resultado = $controlador->consultarProductosCategoria();
+            $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
+            $controlador->catalogoPaginado($pagina);
             break;
         case "verAdministracion":
             if (isset($_SESSION["rol"]) && $_SESSION["rol"] == "admin") {
@@ -42,7 +43,8 @@ if (isset($_GET['action'])) {
             break;
         case "cerrarSesion":
             session_destroy();
-            $resultado = $controlador->consultarProductosCategoria();
+            $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
+            $controlador->catalogoPaginado($pagina);
             break;
         case "verEstadisticas":
             $controlador->consultarEstadisticas();
@@ -272,21 +274,22 @@ if (isset($_GET['action'])) {
         case "confirmarPedido":
             $controlador->confirmarPedido();
             break;
-        
+
         case "cancelarPedido":
             $id = $_GET["idPedido"];
             $controlador->cancelarPedido($id);
             break;
-        
+
         case "consultarProductosPedido":
-            $idPedido = $_POST["idPedido"];
+            $idPedido = isset($_GET["idPedido"]) ? $_GET["idPedido"] : null;
             $controlador->consultarProductosPedido($idPedido);
             break;
         // =======================
         // Default (inicio)
         // =======================
         default:
-            $resultado = $controlador->consultarProductosCategoria();
+            $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
+            $controlador->catalogoPaginado($pagina);
             break;
     }
 } else {

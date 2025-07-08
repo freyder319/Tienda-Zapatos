@@ -78,6 +78,24 @@ class GestorPedido
         return $result;
     } 
 
+    public function consultarProductosPedido($idPedido)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT 
+        dp.id_detalle_pedido AS detalle_id,
+        p.nombre AS nombre_producto,
+        dp.cantidad,
+        dp.precio_unitario,
+        dp.subtotal
+        FROM detalle_pedido dp
+        INNER JOIN productos p ON dp.id_producto = p.id
+        WHERE dp.id_pedido='$idPedido'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResultado();
+        $conexion->cerrar();
+        return $result;
+    }
     public function cancelarPedido($id)
     {
         $conexion = new conexion;
