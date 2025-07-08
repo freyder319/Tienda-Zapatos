@@ -8,7 +8,7 @@ require_once("Modelo/Productos.php");
 require_once("Modelo/GestorPedido.php");
 require_once("Modelo/Pedido.php");
 require_once("Modelo/DetallePedido.php");
-
+require_once("Modelo/Estadisticas.php");
 $controlador = new Controlador();
 
 session_start();
@@ -44,7 +44,9 @@ if (isset($_GET['action'])) {
             session_destroy();
             $resultado = $controlador->consultarProductosCategoria();
             break;
-
+        case "verEstadisticas":
+            $controlador->consultarEstadisticas();
+            break;
         // =======================
         // Usuarios
         // =======================

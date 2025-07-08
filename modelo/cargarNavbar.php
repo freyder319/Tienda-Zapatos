@@ -10,6 +10,7 @@ if (isset($_SESSION['rol'])) {
                 <a href="index.php?action=verProducto">Productos</a>
                 <a href="index.php?action=verCategoria">Categorias</a>
                 <a href="index.php?action=verPedidos">Pedidos</a>
+                <a href="index.php?action=verEstadisticas">Estadisticas</a>
                 <a href="#" onclick="confirmarCerrarSesion()">Cerrar Sesión</a>
             </nav>
             <?php
