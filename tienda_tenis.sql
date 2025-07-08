@@ -3,15 +3,14 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-07-2025 a las 03:32:05
+-- Tiempo de generación: 08-07-2025 a las 21:23:26
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-CREATE DATABASE tienda_tenis;
-USE tienda_tenis;
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -53,9 +52,27 @@ CREATE TABLE `detalle_pedido` (
   `id_pedido` int(11) NOT NULL,
   `id_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `precio_unitario` decimal(10,2) NOT NULL,
-  `subtotal` decimal(10,2) NOT NULL
+  `precio_unitario` decimal(13,2) NOT NULL,
+  `subtotal` decimal(13,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `detalle_pedido`
+--
+
+INSERT INTO `detalle_pedido` (`id_detalle_pedido`, `id_pedido`, `id_producto`, `cantidad`, `precio_unitario`, `subtotal`) VALUES
+(1, 7, 13, 2, 2000000.00, 4000000.00),
+(2, 8, 13, 2, 2000000.00, 4000000.00),
+(3, 8, 14, 3, 1500000.00, 4500000.00),
+(4, 8, 15, 4, 1100000.00, 4400000.00),
+(5, 9, 15, 4, 1100000.00, 4400000.00),
+(6, 9, 17, 2, 90000.00, 180000.00),
+(7, 10, 15, 4, 1100000.00, 4400000.00),
+(8, 10, 17, 2, 90000.00, 180000.00),
+(9, 11, 16, 50, 2500000.00, 99999999.99),
+(10, 11, 14, 1, 1500000.00, 1500000.00),
+(11, 12, 16, 50, 2500000.00, 99999999.99),
+(12, 12, 14, 1, 1500000.00, 1500000.00);
 
 -- --------------------------------------------------------
 
@@ -74,9 +91,6 @@ CREATE TABLE `imagenes` (
 --
 
 INSERT INTO `imagenes` (`id`, `id_producto`, `nombre_archivo`) VALUES
-(26, 13, '1751851303_hpvictus3.jpeg'),
-(27, 13, '1751851303_hpvictus2.jpeg'),
-(28, 13, '1751851303_hpvictus.webp'),
 (29, 14, '1751851492_dell3.webp'),
 (30, 14, '1751851492_dell2.webp'),
 (31, 14, '1751851492_dell1.webp'),
@@ -85,7 +99,28 @@ INSERT INTO `imagenes` (`id`, `id_producto`, `nombre_archivo`) VALUES
 (34, 17, '1751851768_ramddr52.webp'),
 (35, 17, '1751851768_ramddr5.webp'),
 (36, 18, '1751851854_fuentepoder2.webp'),
-(37, 18, '1751851854_fuentepoder.webp');
+(37, 18, '1751851854_fuentepoder.webp'),
+(38, 13, '1751920012_hpvictus3.jpeg'),
+(39, 13, '1751920012_hpvictus2.jpeg'),
+(40, 13, '1751920012_hpvictus.webp'),
+(41, 19, '1751995860_hpvictus.webp'),
+(42, 20, '1751995868_hpvictus.webp'),
+(43, 21, '1751995877_fuentepoder2.webp'),
+(44, 22, '1751995885_hpvictus2.jpeg'),
+(45, 23, '1751995944_ramddr52.webp'),
+(46, 24, '1751995968_fuentepoder2.webp'),
+(47, 25, '1751995979_fuentepoder2.webp'),
+(48, 26, '1751995986_apleescritorio.webp'),
+(49, 27, '1751996027_pcescritorio.jpeg'),
+(50, 28, '1751996038_ramddr52.webp'),
+(51, 29, '1751999350_hpvictus2.jpeg'),
+(52, 30, '1751999359_dell1.webp'),
+(53, 31, '1751999366_dell1.webp'),
+(54, 32, '1751999374_dell3.webp'),
+(55, 33, '1751999382_dell2.webp'),
+(56, 34, '1751999393_dell2.webp'),
+(57, 35, '1751999402_dell3.webp'),
+(58, 36, '1751999431_hpvictus3.jpeg');
 
 -- --------------------------------------------------------
 
@@ -97,8 +132,21 @@ CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `fecha` datetime NOT NULL DEFAULT current_timestamp(),
-  `estado` enum('Entregado','En camino','Pendiente','Cancelado') NOT NULL DEFAULT 'Pendiente'
+  `estado` enum('Entregado','En camino','Pendiente','Cancelado') NOT NULL DEFAULT 'Pendiente',
+  `total` decimal(13,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedidos`
+--
+
+INSERT INTO `pedidos` (`id`, `id_usuario`, `fecha`, `estado`, `total`) VALUES
+(7, 5, '2025-07-07 04:49:31', 'Entregado', 0.00),
+(8, 5, '2025-07-07 04:50:04', 'Cancelado', 0.00),
+(9, 5, '2025-07-07 04:56:31', 'Cancelado', 1190000.00),
+(10, 5, '2025-07-07 04:59:08', 'Pendiente', 4580000.00),
+(11, 5, '2025-07-07 21:40:51', 'Cancelado', 99999999.99),
+(12, 5, '2025-07-07 21:44:33', 'Pendiente', 126500000.00);
 
 -- --------------------------------------------------------
 
@@ -110,7 +158,7 @@ CREATE TABLE `productos` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `especificaciones` varchar(200) DEFAULT NULL,
-  `precio` decimal(10,2) NOT NULL,
+  `precio` decimal(13,2) NOT NULL,
   `id_categoria` int(11) DEFAULT NULL,
   `marca` varchar(200) NOT NULL,
   `modelo` varchar(200) NOT NULL,
@@ -127,7 +175,25 @@ INSERT INTO `productos` (`id`, `nombre`, `especificaciones`, `precio`, `id_categ
 (15, 'PC Oficina', 'I3 10°, 8GB RAM ', 1100000.00, 2, 'Compumax', 'Oficina', '2'),
 (16, 'PC Escritorio', 'M3, 256GB SDD', 2500000.00, 2, 'Apple', 'Desktop', '2'),
 (17, 'Modulo Ram', '8GB x2, 6400 MT/s', 90000.00, 3, 'Corsair', 'Gamer', '3'),
-(18, 'Fuente de poder', '650w ', 100000.00, 3, 'Gigabyte', 'Generico', '3');
+(18, 'Fuente de poder', '650w ', 100000.00, 3, 'Gigabyte', 'Generico', '3'),
+(19, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(20, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(21, 'x', 'x', 1.00, 3, 'x', 'x', '3'),
+(22, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(23, 'x', 'x', 1.00, 3, 'x', 'x', '3'),
+(24, 'x', 'x', 1.00, 3, 'x', 'x', '3'),
+(25, 'x', 'x', 1.00, 3, 'x', 'x', '3'),
+(26, 'x', 'x', 1.00, 2, 'x', 'x', '2'),
+(27, 'x', 'x', 1.00, 2, 'x', 'x', '2'),
+(28, 'x', 'x', 1.00, 3, 'x', 'x', '3'),
+(29, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(30, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(31, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(32, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(33, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(34, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(35, 'x', 'x', 1.00, 1, 'x', 'x', '1'),
+(36, 'x', 'x', 1.00, 1, 'x', 'x', '1');
 
 -- --------------------------------------------------------
 
@@ -214,25 +280,25 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `detalle_pedido`
 --
 ALTER TABLE `detalle_pedido`
-  MODIFY `id_detalle_pedido` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_detalle_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
