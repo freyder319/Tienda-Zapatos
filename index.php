@@ -97,11 +97,14 @@ if (isset($_GET['action'])) {
         case "filtrarCategoria":
             $categoria = $_POST["categoria"];
             if ($categoria == "") {
-                $controlador->consultarProductosCategoria();
+                $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
+                $controlador->catalogoPaginado($pagina);
+                break;
             } else {
-                $controlador->consultarProductosCategoriaxid($categoria);
+                $pagina = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1;
+                $controlador->catalogoPaginadoPorCategoria($pagina, $categoria);
+                break;
             }
-            break;
 
         // =======================
         // Productos

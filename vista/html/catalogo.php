@@ -129,7 +129,24 @@
     echo '<nav aria-label="Page navigation"><ul class="pagination justify-content-center">';
     for ($i = 1; $i <= $totalPaginas; $i++) {
       $active = ($i == $pagina) ? 'active' : '';
-      echo '<li class="page-item ' . $active . '"><a class="page-link" href="index.php?action=catalogoPaginado&pagina=' . $i . '">' . $i . '</a></li>';
+      if (isset($_POST['categoria']) && $_POST['categoria'] !== "") {
+        $categoria = htmlspecialchars($_POST['categoria']);
+        echo '<li class="page-item ' . $active . '">
+                <form method="post" action="index.php?action=filtrarCategoria&pagina=' . $i . '" style="display:inline;">
+                  <input type="hidden" name="categoria" value="' . $categoria . '">
+                  <button type="submit" class="page-link">' . $i . '</button>
+                </form>
+              </li>';
+      } elseif (isset($categoria) && $categoria !== "") {
+        echo '<li class="page-item ' . $active . '">
+                <form method="post" action="index.php?action=filtrarCategoria&pagina=' . $i . '" style="display:inline;">
+                  <input type="hidden" name="categoria" value="' . htmlspecialchars($categoria) . '">
+                  <button type="submit" class="page-link">' . $i . '</button>
+                </form>
+              </li>';
+      } else {
+        echo '<li class="page-item ' . $active . '"><a class="page-link" href="index.php?action=catalogoPaginado&pagina=' . $i . '">' . $i . '</a></li>';
+      }
     }
     echo '</ul></nav>';
   }
