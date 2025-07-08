@@ -33,7 +33,7 @@
     </header>
 
     <section id="panel-admin">
-        <h2>Panel de Administración</h2>
+        <h2>Pedidos del cliente</h2>
         <div class="admin-section">
             <h3>Mis Pedidos</h3>
 
@@ -60,11 +60,20 @@
                                 if ($fila4["estado"] == "Pendiente") {
                                     ?>
                                     <td>
-                                        <a href="index.php?action=consultarProductosPedido&idPedido=<?php echo $fila4['pedido_id'] ?>">
+                                        <a
+                                            href="index.php?action=consultarProductosPedido&idPedido=<?php echo $fila4['pedido_id'] ?>">
                                             <button type="button">Ver productos</button></a>
                                         <button type="button" onclick="confirmarCancelarPedido(<?php echo $fila4['pedido_id'] ?>)">
                                             Cancelar pedido</button>
                                     </td>
+                                <?php } else {
+                                    ?>
+                                    <td>
+                                        <a
+                                            href="index.php?action=consultarProductosPedido&idPedido=<?php echo $fila4['pedido_id'] ?>">
+                                            <button type="button">Ver productos</button></a>
+                                    </td>
+
                                 <?php } ?>
                             </tr>
                         <?php }

@@ -33,7 +33,7 @@
     </header>
 
     <section id="panel-admin">
-        <h2>Panel de Administración</h2>
+        <h2>Carrito del cliente</h2>
         <div class="admin-section">
             <h3>Carrito</h3>
 

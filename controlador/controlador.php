@@ -165,14 +165,20 @@ class Controlador
         header("location:index.php?action=verAdministracion");
     }
 
-    public function consultarProductosCategoria()
+    public function catalogoPaginado($pagina = 1, $limite = 12)
     {
         $gestor = new GestorProducto;
-        $productos = $gestor->consultarProductosTotales();
+        $totalProductos = $gestor->consultarCantidadProductos();
+        $totalPaginas = ceil($totalProductos / $limite);
+        $pagina = max(1, min($pagina, $totalPaginas));
+        $inicio = ($pagina - 1) * $limite;
+    
+        $productos = $gestor->consultarProductosPaginados($inicio, $limite);
         $imagenes = $gestor->consultarImagenesProducto();
         $categorias = $gestor->consultarCategorias();
         $categoriasSelect = $gestor->consultarCategorias();
-        require_once("vista/html/catalogo.php");
+    
+        require("vista/html/catalogo.php");
     }
 
     public function consultarProductosCategoriaxid($categoria)
@@ -183,6 +189,13 @@ class Controlador
         $categorias = $gestor->consultarCategorias();
         $categoriasSelect = $gestor->consultarCategorias();
         require_once("vista/html/catalogo.php");
+    }
+
+    public function consultarProductosPedido($idPedido)
+    {
+        $gestor = new GestorPedido;
+        $productosPedido = $gestor->consultarProductosPedido($idPedido);
+        require_once("vista/html/productosPedido.php");
     }
 
     // =======================
@@ -245,7 +258,7 @@ class Controlador
             unset($_SESSION['carrito']);
             echo "<script>alert('Carrito eliminado.');</script>"
                 . "<script>window.location.href='index.php?action=verInicio';</script>";
-        } 
+        }
     }
 
     public function eliminarProductoCarrito($idProducto)
@@ -283,7 +296,7 @@ class Controlador
         if (isset($_SESSION['carrito']) && count($_SESSION['carrito']) > 0) {
             $gestor = new GestorPedido;
             $fecha = date("Y-m-d H:i:s");
-            $total = 0; 
+            $total = 0;
 
             foreach ($_SESSION['carrito'] as $producto) {
                 $total += $producto['precio'] * $producto['cantidad'];

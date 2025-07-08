@@ -141,3 +141,22 @@ footer {
 .imagenEliminar:hover .contenedor_basurero {
   opacity: 1;
 }
+
+.pagination .page-item.active .page-link {
+  background-color: #333;   /* Cambia este color al que prefieras */
+  border-color: #333;       /* Cambia el borde del activo */
+  color: #fff;
+}
+
+/* Cambia el color del borde de toda la paginación */
+.pagination .page-link {
+  border: 2px solid #2e3237;   /* Cambia este color al que prefieras */
+  color: #333;
+}
+
+/* Opcional: cambia el color al pasar el mouse */
+.pagination .page-link:hover {
+  background-color: #e9ecef;
+  color: #333;
+  border-color: #333;
+}
