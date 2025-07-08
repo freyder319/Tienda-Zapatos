@@ -357,4 +357,15 @@ class Controlador
         $gestor->eliminarImagen($id);
         header("location:index.php?action=verAdministracion");
     }
+    // =======================
+    // Estadisticas
+    // =======================
+    public function consultarEstadisticas()
+    {
+        $gestor = new Estadisticas;
+        list($labelsCat,  $dataCat)  = $gestor->unidadesVendidasPorCategoria();
+        list($labelsProd, $dataProd) = $gestor->topProductosVendidos();
+        list($labelsIng,  $dataIng)  = $gestor->ingresosPorCategoria();
+        require_once("vista/html/estadisticas.php");
+    }
 }
