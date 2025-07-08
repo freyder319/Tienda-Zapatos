@@ -1,6 +1,6 @@
-# Tienda-Zapatos
+# Tienda-computadores y repuestos
 
-Sistema web para la gestión de una tienda de zapatos. Incluye un catálogo de productos, sistema de compras para clientes, y una zona administrativa para la gestión de productos, categorías y pedidos.
+Sistema web para la gestión de una tienda de computadores y repuestos. Incluye un catálogo de productos, sistema de compras para clientes, y una zona administrativa para la gestión de productos, categorías y pedidos.
 
 ---
 
