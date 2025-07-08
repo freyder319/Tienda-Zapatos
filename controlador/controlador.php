@@ -391,9 +391,9 @@ class Controlador
     public function consultarEstadisticas()
     {
         $gestor = new Estadisticas;
-        list($labelsCat,  $dataCat)  = $gestor->unidadesVendidasPorCategoria();
-        list($labelsProd, $dataProd) = $gestor->topProductosVendidos();
-        list($labelsIng,  $dataIng)  = $gestor->ingresosPorCategoria();
+        $unidadesVendidas  = $gestor->unidadesVendidasPorCategoria();
+        $topProductos = $gestor->topProductosVendidos();
+        $ingresosCategoria  = $gestor->ingresosPorCategoria();
         require_once("vista/html/estadisticas.php");
     }
 }
