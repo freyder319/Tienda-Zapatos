@@ -164,6 +164,39 @@ class GestorProducto
         return $result['cantidad'];
     }
 
+    public function consultarProductosPaginadosPorCategoria($inicio, $limite, $categoria)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT productos.id AS id_producto,
+        categorias.nombre AS nombre_categoria,
+        categorias.id as id_categoria,
+        productos.nombre,
+        productos.especificaciones,
+        productos.precio,
+        productos.modelo,
+        productos.marca
+        FROM productos
+        JOIN categorias ON productos.id_categoria = categorias.id
+        WHERE categorias.id='$categoria'
+        LIMIT $inicio, $limite";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerResultado();
+        $conexion->cerrar();
+        return $result;
+    }
+
+    public function consultarCantidadProductosPorCategoria($categoria)
+    {
+        $conexion = new conexion;
+        $conexion->abrir();
+        $sql = "SELECT COUNT(*) AS cantidad FROM productos WHERE id_categoria='$categoria'";
+        $conexion->consulta($sql);
+        $result = $conexion->obtenerUnaFila();
+        $conexion->cerrar();
+        return $result['cantidad'];
+    }
+
     public function editarProductoSinFoto(productos $productos, $id){
         $nombre=$productos->obtenernombre();
         $descripcion=$productos->obtenerEspecificacion();

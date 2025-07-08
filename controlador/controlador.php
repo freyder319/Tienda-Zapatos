@@ -181,6 +181,21 @@ class Controlador
         require("vista/html/catalogo.php");
     }
 
+    public function catalogoPaginadoPorCategoria($pagina = 1, $categoria, $limite = 12)
+    {
+        $gestor = new GestorProducto;
+        $totalProductos = $gestor->consultarCantidadProductosPorCategoria($categoria);
+        $totalPaginas = ceil($totalProductos / $limite);
+        $pagina = max(1, min($pagina, $totalPaginas));
+        $inicio = ($pagina - 1) * $limite;
+
+        $productos = $gestor->consultarProductosPaginadosPorCategoria($inicio, $limite, $categoria);
+        $imagenes = $gestor->consultarImagenesProducto();
+        $categorias = $gestor->consultarCategorias();
+        $categoriasSelect = $gestor->consultarCategorias();
+        require("vista/html/catalogo.php");
+    }
+
     public function consultarProductosCategoriaxid($categoria)
     {
         $gestor = new GestorProducto;
