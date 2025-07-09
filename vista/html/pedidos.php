@@ -62,6 +62,8 @@
                     <td><?php echo $fila4["estado"] ?></td>
                     <td><?php if ($fila4["estado"] == "Entregado") {
                       echo "El pedido ya ha sido entregado.";
+                    }elseif($fila4["estado"] == "Cancelado") {
+                      echo "El pedido ha sido cancelado.";
                     } else {
                       ?>
                         <form action='index.php?action=actualizarEstadoPedido' method='post'>
@@ -78,10 +80,6 @@
                             <option <?php if ($fila4["estado"] == "En camino") {
                               echo "selected";
                             } ?> value='En camino'>En camino
-                            </option>
-                            <option <?php if ($fila4["estado"] == "Cancelado") {
-                              echo "selected";
-                            } ?> value='Cancelado'> Cancelado
                             </option>
                           </select>
                           <button type='submit'>Actualizar</button>
